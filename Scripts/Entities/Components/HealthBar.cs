@@ -17,14 +17,9 @@ namespace Angar.Entities.Components
 
 		private Bar backgroundBar;
 		private Bar foregroundBar;
+		private Anim anim;
 
 		private Vector2 offset;
-
-		private bool isChanging;
-		private float timeElapsed;
-		private float currentHealth;
-		private float startHealth;
-		private float endHealth;
 
 		public override Color Color
 		{
@@ -46,15 +41,13 @@ namespace Angar.Entities.Components
 
 				offset = nativeOffset * value;
 				backgroundBar.Size = new Vector2(nativeSize.X * value, nativeSize.Y);
-				foregroundBar.Width = (backgroundBar.Size.X - innerSizeOffset.X) * value / entity.MaxHealth * currentHealth;
+				foregroundBar.Width = (backgroundBar.Size.X - innerSizeOffset.X) * value / entity.MaxHealth * anim.CurrentValue;
 			}
 		}
 
 		public HealthBar(Entity entity) : base(entity)
 		{
 			offset = nativeOffset;
-			currentHealth = entity.Health;
-			endHealth = entity.Health;
 
 			backgroundBar = new Bar();
 			backgroundBar.Size = nativeSize;
@@ -65,34 +58,22 @@ namespace Angar.Entities.Components
 			foregroundBar.Size = nativeSize - innerSizeOffset;
 			foregroundBar.Color = new Color(133, 227, 125);
 			foregroundBar.LayerDepth = 0.7f;
+
+			anim = new Anim();
+			anim.Duration = 0.1f;
+			anim.IsCurve = true;
+			anim.CurrentValue = entity.Health;
+			anim.OnPlaying += (float t) =>
+			{
+				foregroundBar.Width = (backgroundBar.Size.X - innerSizeOffset.X) * Scale / entity.MaxHealth * t;
+			};
 		}
 
 		public override void Update()
 		{
-			if (MathF.Abs(entity.Health - endHealth) > 1)
-			{
-				startHealth = currentHealth;
-				endHealth = entity.Health;
-				timeElapsed = 0;
-				isChanging = true;
-			}
+			if (MathF.Abs(entity.Health - anim.EndValue) > 1) anim.Play(entity.Health);
 
-			if (!isChanging) return;
-
-			if (timeElapsed < 0.1f)
-			{
-				float t = timeElapsed / 0.1f;
-				t = t * t * (3f - 2f * t);
-				currentHealth = MathHelper.Lerp(startHealth, endHealth, t);
-				foregroundBar.Width = (backgroundBar.Size.X - innerSizeOffset.X) * Scale / entity.MaxHealth * currentHealth;
-				timeElapsed += Globals.deltaTime;
-			}
-			else
-			{
-				currentHealth = endHealth;
-				foregroundBar.Width = (backgroundBar.Size.X - innerSizeOffset.X) * Scale / entity.MaxHealth * currentHealth;
-				isChanging = false;
-			}
+			anim.Update();
 		}
 
 		public override void Draw()

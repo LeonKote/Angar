@@ -13,15 +13,14 @@ namespace Angar.Entities
 		private Vector2 position;
 		protected Vector2 movement;
 		protected float friction;
-		protected bool isDestroying;
 
 		protected int maxHealth;
 		protected int health;
 		protected int bodyDamage;
 		private float nextCollision;
 
-		private bool isHurt;
-		private float hurtTime;
+		protected Anim hurtAnim;
+		protected Anim destroyAnim;
 
 		protected HashSet<Component> components = new HashSet<Component>();
 		protected Body body;
@@ -34,6 +33,18 @@ namespace Angar.Entities
 		{
 			body = new Body(this);
 			components.Add(body);
+
+			hurtAnim = new Anim();
+			hurtAnim.Duration = 0.25f;
+			hurtAnim.OnPlaying += OnHurtAnim;
+
+			destroyAnim = new Anim();
+			destroyAnim.Duration = 0.25f;
+			destroyAnim.OnPlaying += OnDestroyAnim;
+			destroyAnim.OnEnd += () =>
+			{
+				World.Instance.RemoveEntity(this);
+			};
 		}
 
 		public virtual void Update()
@@ -47,17 +58,18 @@ namespace Angar.Entities
 			}
 
 			UpdateCollisions();
-			UpdateHurt();
-			UpdateDestroying();
+
+			hurtAnim.Update();
+			destroyAnim.Update();
 		}
 
 		private void UpdateCollisions()
 		{
-			if (this.isDestroying || Globals.time < this.nextCollision) return;
+			if (destroyAnim.IsPlaying || Globals.time < this.nextCollision) return;
 
 			foreach (Entity entity in World.Instance.Entities)
 			{
-				if (entity == this || entity.isDestroying) continue;
+				if (entity == this || destroyAnim.IsPlaying) continue;
 
 				float dist = entity.body.realSize + this.body.realSize;
 				if (Vector2.DistanceSquared(entity.position, this.position) < dist * dist)
@@ -77,14 +89,14 @@ namespace Angar.Entities
 			entity.health -= bodyDamage;
 			if (entity.health <= 0)
 			{
-				entity.isDestroying = true;
 				OnDestroyEntity(entity);
+				entity.destroyAnim.Play();
 			}
 
 			if (this is not Projectile)
 			{
 				AddForce(vec * 2);
-				isHurt = true;
+				hurtAnim.Play();
 			}
 
 			nextCollision = Globals.time + 0.5f;
@@ -95,46 +107,23 @@ namespace Angar.Entities
 			(this as Projectile)?.Parent.OnDestroyEntity(entity);
 		}
 
-		private void UpdateHurt()
+		private void OnHurtAnim(float t)
 		{
-			if (!isHurt) return;
-
-			if (hurtTime < 0.25f)
+			foreach (Component component in components)
 			{
-				float t = hurtTime / 0.25f;
-				foreach (Component component in components)
-				{
-					if (t < 0.25f)
-						component.Color = Utils.SetAlpha(Color.White, component.Color.A);
-					else
-						component.Color = Utils.Lerp(Color.Red, component.NativeColor, component.Color.A, t);
-				}
-				hurtTime += Globals.deltaTime;
-			}
-			else
-			{
-				foreach (Component component in components)
-				{
-					component.Color = Utils.SetAlpha(component.NativeColor, component.Color.A);
-				}
-				hurtTime = 0;
-				isHurt = false;
+				if (t < 0.25f)
+					component.Color = Utils.SetAlpha(Color.White, component.Color.A);
+				else
+					component.Color = Utils.Lerp(Color.Red, component.NativeColor, component.Color.A, t);
 			}
 		}
 
-		private void UpdateDestroying()
+		private void OnDestroyAnim(float t)
 		{
-			if (!isDestroying) return;
-
 			foreach (Component component in components)
 			{
-				if (component.Color.A > 0)
-				{
-					float t = Globals.deltaTime;
-					component.Color = Utils.SetAlpha(component.Color, (byte)(component.Color.A * t * 50));
-					component.Scale *= t + 1;
-				}
-				else World.Instance.RemoveEntity(this);
+				component.Color = Utils.SetAlpha(component.Color, (byte)(255 - t * 255));
+				component.Scale *= 1.01f;
 			}
 		}
 

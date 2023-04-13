@@ -15,14 +15,9 @@ namespace Angar.UI
 
 		private float maxValue;
 
-		private bool isChanging;
-		private float timeElapsed;
-		private float currentValue;
-		private float startValue;
-		private float endValue;
-
 		private Bar backgroundBar;
 		private Bar foregroundBar;
+		private Anim anim;
 
 		public int MaxValue
 		{
@@ -35,13 +30,10 @@ namespace Angar.UI
 
 		public int Value
 		{
-			get { return (int)endValue; }
+			get { return (int)anim.EndValue; }
 			set
 			{
-				startValue = currentValue;
-				endValue = value;
-				timeElapsed = 0;
-				isChanging = true;
+				anim.Play(value);
 			}
 		}
 
@@ -52,26 +44,19 @@ namespace Angar.UI
 
 			foregroundBar = new Bar();
 			foregroundBar.Color = new Color(255, 232, 105) * 0.9f;
+
+			anim = new Anim();
+			anim.Duration = 0.25f;
+			anim.IsCurve = true;
+			anim.OnPlaying += (float t) =>
+			{
+				foregroundBar.Width = (rect.Size.X - innerSizeOffset.X) / maxValue * t;
+			};
 		}
 
 		public override void Update()
 		{
-			if (!isChanging) return;
-
-			if (timeElapsed < 0.25f)
-			{
-				float t = timeElapsed / 0.25f;
-				t = t * t * (3f - 2f * t);
-				currentValue = MathHelper.Lerp(startValue, endValue, t);
-				foregroundBar.Width = (rect.Size.X - innerSizeOffset.X) / maxValue * currentValue;
-				timeElapsed += Globals.deltaTime;
-			}
-			else
-			{
-				currentValue = endValue;
-				foregroundBar.Width = (rect.Size.X - innerSizeOffset.X) / maxValue * currentValue;
-				isChanging = false;
-			}
+			anim.Update();
 		}
 
 		public override void Draw()

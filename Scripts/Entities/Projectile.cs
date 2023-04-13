@@ -35,9 +35,9 @@ namespace Angar.Entities
 		{
 			base.Update();
 
-			if (!isDestroying && Globals.time > deathTime)
+			if (!destroyAnim.IsPlaying && Globals.time > deathTime)
 			{
-				isDestroying = true;
+				destroyAnim.Play();
 			}
 		}
 	}
