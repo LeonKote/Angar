@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Angar.UI;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -11,6 +12,7 @@ namespace Angar
 
 		private World world;
 		private Player player;
+		private Canvas canvas;
 
 		public Game1()
 		{
@@ -39,6 +41,7 @@ namespace Angar
 
 			world = new World();
 			player = new Player();
+			canvas = new Canvas();
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -47,10 +50,11 @@ namespace Angar
 				Exit();
 
 			// TODO: Add your update logic here
-			Globals.gameTime = gameTime;
+			Globals.SetGameTime(gameTime);
 			Input.Update();
 			player.Update();
 			world.Update();
+			canvas.Update();
 
 			base.Update(gameTime);
 		}
@@ -62,6 +66,7 @@ namespace Angar
 			// TODO: Add your drawing code here
 			player.Draw();
 			world.Draw();
+			canvas.Draw();
 
 			base.Draw(gameTime);
 		}

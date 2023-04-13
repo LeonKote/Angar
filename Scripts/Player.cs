@@ -1,4 +1,5 @@
 ﻿using Angar.Entities;
+using Angar.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -21,7 +22,8 @@ namespace Angar
 		public Player()
 		{
 			robot = new Robot();
-			World.Main.AddEntity(robot);
+			robot.ScoreChanged += OnScoreChanged;
+			World.Instance.AddEntity(robot);
 
 			camera = new Camera(Globals.spriteBatch.GraphicsDevice.Viewport.Bounds);
 
@@ -36,9 +38,20 @@ namespace Angar
 			Move();
 		}
 
+		private void OnScoreChanged(ScoreHandler score)
+		{
+			ProgressBar scoreBar = Canvas.Instance.ScoreBar;
+			Label scoreText = Canvas.Instance.ScoreText;
+
+			scoreBar.MaxValue = score.NextLvlExp - score.LastLvlExp;
+			scoreBar.Value = score.Exp - score.LastLvlExp;
+
+			scoreText.Text = score.Lvl + "  LVL";
+		}
+
 		private void SetCameraPosition()
 		{
-			camera.Position = Vector2.Lerp(camera.Position, robot.Position, (float)Globals.gameTime.ElapsedGameTime.TotalSeconds * 5);
+			camera.Position = Vector2.Lerp(camera.Position, robot.Position, Globals.deltaTime * 5);
 		}
 
 		private void SetBackgroundStartVec()
@@ -70,9 +83,12 @@ namespace Angar
 			if (Input.GetButton(Keys.A)) movement.X -= 1;
 			if (Input.GetButton(Keys.S)) movement.Y += 1;
 			if (Input.GetButton(Keys.D)) movement.X += 1;
-			if (movement.LengthSquared() > 0) movement.Normalize();
 
-			robot.AddForce(movement * 0.25f);
+			if (movement.LengthSquared() > 0)
+			{
+				movement.Normalize();
+				robot.AddForce(movement * 0.25f);
+			}
 		}
 
 		public void Draw()

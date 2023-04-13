@@ -13,16 +13,18 @@ namespace Angar
 	{
 		private HashSet<Entity> entities = new HashSet<Entity>();
 
-		public static World Main;
+		public static World Instance;
+
+		public HashSet<Entity> Entities { get { return entities; } }
 
 		public World()
 		{
-			Main ??= this;
+			Instance ??= this;
 
-			for (int i = 0; i < 20; i++)
+			for (int i = 0; i < 50; i++)
 			{
 				Polygon point = new Polygon();
-				point.Position = new Vector2(Globals.RandomSingle(-512, 512), Globals.RandomSingle(-512, 512));
+				point.Position = new Vector2(Utils.RandomSingle(-1024, 1024), Utils.RandomSingle(-1024, 1024));
 				entities.Add(point);
 			}
 		}
@@ -37,7 +39,7 @@ namespace Angar
 
 		public void Draw()
 		{
-			Globals.spriteBatch.Begin(SpriteSortMode.FrontToBack, null, null, null, null, null, Camera.Main.TransformMatrix);
+			Globals.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, null, null, null, null, Camera.Main.TransformMatrix);
 			foreach (Entity entity in entities)
 			{
 				entity.Draw();

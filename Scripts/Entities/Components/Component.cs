@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,23 +10,37 @@ namespace Angar.Entities.Components
 	public abstract class Component
 	{
 		protected Entity entity;
+		private Color nativeColor = Color.White;
 
-		public Texture2D Texture;
-		public float Rotation;
-		public Color Color;
-		public Vector2 Origin;
-		public float Scale;
-		public float LayerDepth;
+		public virtual Color Color { get; set; } = Color.White;
+		public float Rotation { get; set; }
+		public Vector2 Origin { get; set; }
+		public virtual float Scale { get; set; } = 1.0f;
+		public float LayerDepth { get; set; }
+
+		public Color NativeColor
+		{
+			get { return nativeColor; }
+			set
+			{
+				nativeColor = value;
+				Color = value;
+			}
+		}
 
 		public Component(Entity entity)
 		{
 			this.entity = entity;
-			Color = Color.White;
+		}
+
+		public virtual void Update()
+		{
+
 		}
 
 		public virtual void Draw()
 		{
-			Globals.spriteBatch.Draw(Texture, entity.Position, null, Color, Rotation, Origin, Scale, SpriteEffects.None, LayerDepth);
+
 		}
 	}
 }

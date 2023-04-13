@@ -10,14 +10,14 @@ namespace Angar
 {
 	public static class Globals
 	{
-		private static Random rand = new Random();
-
 		public static SpriteBatch spriteBatch;
-		public static GameTime gameTime;
+		public static float deltaTime;
+		public static float time;
 
-		public static float RandomSingle(float min, float max)
+		public static void SetGameTime(GameTime gameTime)
 		{
-			return rand.NextSingle() * (max - min) + min;
+			deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+			time = (float)gameTime.TotalGameTime.TotalSeconds;
 		}
 	}
 }
