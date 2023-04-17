@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Angar
 {
@@ -22,6 +23,9 @@ namespace Angar
 
 			_graphics.PreferredBackBufferWidth = 1280;
 			_graphics.PreferredBackBufferHeight = 720;
+
+			Window.AllowUserResizing = true;
+			Window.ClientSizeChanged += OnClientSizeChanged;
 		}
 
 		protected override void Initialize()
@@ -36,6 +40,7 @@ namespace Angar
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			// TODO: use this.Content to load your game content here
+			Globals.graphicsDevice = GraphicsDevice;
 			Globals.spriteBatch = _spriteBatch;
 			Atlas.Init(Content);
 
@@ -69,6 +74,14 @@ namespace Angar
 			canvas.Draw();
 
 			base.Draw(gameTime);
+		}
+
+		private void OnClientSizeChanged(object sender, EventArgs e)
+		{
+			Rectangle bounds = GraphicsDevice.Viewport.Bounds;
+			float scale = MathF.Max(bounds.Width / Globals.nativeResolution.X, bounds.Height / Globals.nativeResolution.Y);
+			player.SetCameraZoom(scale);
+			canvas.SetScale(scale);
 		}
 	}
 }

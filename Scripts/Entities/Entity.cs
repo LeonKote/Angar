@@ -26,8 +26,12 @@ namespace Angar.Entities
 		protected Body body;
 
 		public Vector2 Position { get { return position; } set { position = value; } }
+		public Vector2 Movement { get { return movement; } }
+		public Color Color { get { return body.NativeColor; } set { body.NativeColor = value; } }
 		public int MaxHealth { get { return maxHealth; } set { maxHealth = value; } }
 		public int Health { get { return health; } set { health = value; } }
+
+		protected ClosestEntitiesHandler closestEntities = new ClosestEntitiesHandler();
 
 		public Entity()
 		{
@@ -67,12 +71,18 @@ namespace Angar.Entities
 		{
 			if (destroyAnim.IsPlaying || Globals.time < this.nextCollision) return;
 
+			closestEntities.Clear();
+
 			foreach (Entity entity in World.Instance.Entities)
 			{
-				if (entity == this || destroyAnim.IsPlaying) continue;
+				if (entity == this || entity.destroyAnim.IsPlaying) continue;
 
-				float dist = entity.body.realSize + this.body.realSize;
-				if (Vector2.DistanceSquared(entity.position, this.position) < dist * dist)
+				float dist = Vector2.DistanceSquared(entity.position, this.position);
+				float size = entity.body.realSize + this.body.realSize;
+
+				closestEntities.HandleEntity(entity, dist);
+
+				if (dist < size * size)
 				{
 					Vector2 vec = entity.position - this.position;
 					vec.Normalize();
@@ -86,6 +96,11 @@ namespace Angar.Entities
 
 		protected virtual void OnCollision(Entity entity, Vector2 vec)
 		{
+			if (this is Projectile && entity is Projectile)
+			{
+				if ((this as Projectile).Parent == (entity as Projectile).Parent) return;
+			}
+
 			entity.health -= bodyDamage;
 			if (entity.health <= 0)
 			{

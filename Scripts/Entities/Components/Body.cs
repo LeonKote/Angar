@@ -36,7 +36,6 @@ namespace Angar.Entities.Components
 		public Body(Entity entity) : base(entity)
 		{
 			Texture = Atlas.Body;
-			NativeColor = new Color(0, 178, 225);
 			Origin = new Vector2(64, 64);
 			Scale = 0.5f;
 			LayerDepth = 0.5f;

@@ -10,11 +10,13 @@ namespace Angar.UI
 	{
 		public HashSet<UIElement> elements = new HashSet<UIElement>();
 
-		public static Canvas Instance;
+		private static Canvas instance;
+
+		public static Canvas Instance { get { return instance; } }
 
 		public Canvas()
 		{
-			Instance = this;
+			instance = this;
 			InitializeComponent();
 		}
 
@@ -34,6 +36,14 @@ namespace Angar.UI
 				if (element.IsActive) element.Draw();
 			}
 			Globals.spriteBatch.End();
+		}
+
+		public void SetScale(float scale)
+		{
+			foreach (UIElement element in elements)
+			{
+				element.LocalScale = scale;
+			}
 		}
 	}
 }

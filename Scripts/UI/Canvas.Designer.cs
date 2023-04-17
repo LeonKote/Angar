@@ -22,7 +22,6 @@ namespace Angar.UI
 			ScoreBar.Size = new Vector2(300, 32);
 			ScoreBar.Anchor = Align.Bottom;
 			ScoreBar.Origin = Align.Bottom;
-			ScoreBar.Apply();
 			elements.Add(ScoreBar);
 			//
 			// LevelText
@@ -32,7 +31,7 @@ namespace Angar.UI
 			ScoreText.Origin = Align.Center;
 			ScoreText.Font = Atlas.Rubik;
 			ScoreText.Text = "1  LVL";
-			ScoreText.LocalScale = 1f;
+			ScoreText.LocalScale = 0.5f;
 			ScoreBar.AddChild(ScoreText);
 		}
 	}

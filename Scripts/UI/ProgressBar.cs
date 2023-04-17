@@ -66,8 +66,9 @@ namespace Angar.UI
 			base.Draw();
 		}
 
-		public void Apply()
+		protected override void ApplyTransform()
 		{
+			base.ApplyTransform();
 			backgroundBar.Rect = rect;
 			foregroundBar.Rect = new Rectangle(rect.Location + innerPositionOffset, new Point(rect.Height, rect.Height) - innerSizeOffset);
 		}

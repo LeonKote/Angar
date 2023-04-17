@@ -25,5 +25,33 @@ namespace Angar
 		{
 			return new Color(value.R, value.G, value.B, alpha);
 		}
+
+		public static float LerpAngle(float value1, float value2, float amount)
+		{
+			return MathHelper.WrapAngle(value1 + MathHelper.WrapAngle(value2 - value1) * amount);
+		}
+
+		public static Vector2 RandomRect()
+		{
+			Vector2 vec;
+
+			switch (rand.Next(4))
+			{
+				case 0:
+					vec = new Vector2(RandomSingle(-384, 384), RandomSingle(-192, 0) - 192);
+					break;
+				case 1:
+					vec = new Vector2(RandomSingle(-384, 384), RandomSingle(0, 192) + 192);
+					break;
+				case 2:
+					vec = new Vector2(RandomSingle(-192, 0) - 192, RandomSingle(-384, 384));
+					break;
+				default:
+					vec = new Vector2(RandomSingle(0, 192) + 192, RandomSingle(-384, 384));
+					break;
+			}
+
+			return vec;
+		}
 	}
 }

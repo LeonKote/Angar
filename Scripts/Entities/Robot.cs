@@ -1,4 +1,5 @@
 ﻿using Angar.Entities.Components;
+using Angar.Entities.Components.Guns;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Angar.Entities
 {
-	public class Robot : Entity
+    public class Robot : Entity
 	{
 		protected Gun gun;
 		protected HealthBar healthBar;
@@ -23,11 +24,11 @@ namespace Angar.Entities
 		{
 			friction = 0.95f;
 
-			maxHealth = 100;
-			health = 100;
+			maxHealth = 500;
+			health = 500;
 			bodyDamage = 25;
 
-			gun = new Gun(this);
+			gun = new DefaultGun(this);
 			components.Add(gun);
 
 			healthBar = new HealthBar(this);
@@ -41,7 +42,7 @@ namespace Angar.Entities
 			if (entity is Polygon)
 			{
 				score.Exp += ((Polygon)entity).Score;
-				ScoreChanged.Invoke(score);
+				ScoreChanged?.Invoke(score);
 			}
 		}
 

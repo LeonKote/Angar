@@ -12,21 +12,27 @@ namespace Angar
 	public class World
 	{
 		private HashSet<Entity> entities = new HashSet<Entity>();
+		private Queue<Entity> entitesToAdd = new Queue<Entity>();
 
-		public static World Instance;
+		private static World instance;
 
 		public HashSet<Entity> Entities { get { return entities; } }
+		public static World Instance { get { return instance; } }
 
 		public World()
 		{
-			Instance ??= this;
+			instance = this;
 
-			for (int i = 0; i < 50; i++)
+			/*for (int i = 0; i < 50; i++)
 			{
 				Polygon point = new Polygon();
 				point.Position = new Vector2(Utils.RandomSingle(-1024, 1024), Utils.RandomSingle(-1024, 1024));
 				entities.Add(point);
-			}
+			}*/
+
+			Enemy enemy = new Enemy();
+			enemy.Position = new Vector2(512, -256);
+			entities.Add(enemy);
 		}
 
 		public void Update()
@@ -35,11 +41,13 @@ namespace Angar
 			{
 				entity.Update();
 			}
+			while (entitesToAdd.Count > 0)
+				entities.Add(entitesToAdd.Dequeue());
 		}
 
 		public void Draw()
 		{
-			Globals.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, null, null, null, null, Camera.Main.TransformMatrix);
+			Globals.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, null, null, null, null, Camera.Instance.TransformMatrix);
 			foreach (Entity entity in entities)
 			{
 				entity.Draw();
@@ -49,7 +57,7 @@ namespace Angar
 
 		public void AddEntity(Entity entity)
 		{
-			entities.Add(entity);
+			entitesToAdd.Enqueue(entity);
 		}
 
 		public void RemoveEntity(Entity entity)

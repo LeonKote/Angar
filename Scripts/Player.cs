@@ -22,12 +22,13 @@ namespace Angar
 		public Player()
 		{
 			robot = new Robot();
+			robot.Color = new Color(0, 178, 225);
 			robot.ScoreChanged += OnScoreChanged;
 			World.Instance.AddEntity(robot);
 
-			camera = new Camera(Globals.spriteBatch.GraphicsDevice.Viewport.Bounds);
+			camera = new Camera();
 
-			endSize = camera.Bounds.Size.ToVector2() + new Vector2(32, 32);
+			endSize = Globals.nativeResolution + new Vector2(32, 32);
 		}
 
 		public void Update()
@@ -56,7 +57,7 @@ namespace Angar
 
 		private void SetBackgroundStartVec()
 		{
-			startVec = camera.VisibleArea.Location.ToVector2();
+			startVec = camera.ScreenToWorldPoint(Vector2.Zero);
 			startVec = new Vector2(MathF.Floor(startVec.X / 32) * 32, MathF.Floor(startVec.Y / 32) * 32);
 		}
 
@@ -66,7 +67,7 @@ namespace Angar
 
 			robot.Rotation = MathF.Atan2(mousePos.Y - robot.Position.Y, mousePos.X - robot.Position.X);
 
-			if (Input.GetMouseButtonDown(0))
+			if (Input.GetMouseButton(0))
 			{
 				Vector2 rotVec = mousePos - robot.Position;
 				rotVec.Normalize();
@@ -102,6 +103,11 @@ namespace Angar
 				}
 			}
 			Globals.spriteBatch.End();
+		}
+
+		public void SetCameraZoom(float scale)
+		{
+			camera.Zoom = scale;
 		}
 	}
 }

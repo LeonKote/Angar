@@ -108,7 +108,7 @@ namespace Angar.UI
 			}
 		}
 
-		private void ApplyTransform()
+		protected virtual void ApplyTransform()
 		{
 			scale = localScale;
 
@@ -119,7 +119,7 @@ namespace Angar.UI
 			}
 			else
 			{
-				position = Globals.spriteBatch.GraphicsDevice.Viewport.Bounds.Size.ToVector2() * anchor + localPosition;
+				position = Globals.graphicsDevice.Viewport.Bounds.Size.ToVector2() * anchor + localPosition;
 			}
 
 			Vector2 realSize = size * scale;

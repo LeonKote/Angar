@@ -12,19 +12,16 @@ namespace Angar.Entities
 		private float deathTime;
 		private Entity parent;
 
-		public Entity Parent { get { return parent; } }
+		public Entity Parent { get { return parent; } set { parent = value; } }
+		public float LifeTime { set { deathTime = Globals.time + value; } }
 
-		public Projectile(Entity parent, float lifetime)
+		public Projectile()
 		{
-			this.parent = parent;
-
 			friction = 1.0f;
 
 			maxHealth = 10;
 			health = 10;
 			bodyDamage = 25;
-
-			deathTime = Globals.time + lifetime;
 
 			body.Texture = Atlas.Projecttile;
 			body.Origin = new Vector2(32, 32);
