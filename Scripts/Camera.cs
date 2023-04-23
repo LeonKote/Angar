@@ -13,7 +13,7 @@ namespace Angar
 		private Matrix inverseTransformMatrix;
 
 		private Vector2 position;
-		private float zoom = 1f;
+		private float zoom = 1.0f;
 
 		private static Camera instance;
 

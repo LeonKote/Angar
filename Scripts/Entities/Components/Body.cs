@@ -11,7 +11,7 @@ namespace Angar.Entities.Components
 	public class Body : Component
 	{
 		private Texture2D texture;
-		public float realSize;
+		private float realSize;
 
 		public Texture2D Texture
 		{
@@ -33,11 +33,10 @@ namespace Angar.Entities.Components
 			}
 		}
 
+		public float RealSize { get { return realSize; } }
+
 		public Body(Entity entity) : base(entity)
 		{
-			Texture = Atlas.Body;
-			Origin = new Vector2(64, 64);
-			Scale = 0.5f;
 			LayerDepth = 0.5f;
 		}
 

@@ -22,17 +22,6 @@ namespace Angar
 		public World()
 		{
 			instance = this;
-
-			/*for (int i = 0; i < 50; i++)
-			{
-				Polygon point = new Polygon();
-				point.Position = new Vector2(Utils.RandomSingle(-1024, 1024), Utils.RandomSingle(-1024, 1024));
-				entities.Add(point);
-			}*/
-
-			Enemy enemy = new Enemy();
-			enemy.Position = new Vector2(512, -256);
-			entities.Add(enemy);
 		}
 
 		public void Update()

@@ -12,9 +12,8 @@ namespace Angar.Entities
     public class Robot : Entity
 	{
 		protected Gun gun;
-		protected HealthBar healthBar;
 
-		private ScoreHandler score;
+		private ScoreHandler score = new ScoreHandler();
 
 		public float Rotation { get { return gun.Rotation; } set { gun.Rotation = value; } }
 
@@ -24,17 +23,25 @@ namespace Angar.Entities
 		{
 			friction = 0.95f;
 
-			maxHealth = 500;
-			health = 500;
-			bodyDamage = 25;
+			body.Texture = Utils.GetOutlineTexture(Atlas.Circle, 0.5f);
+			body.Origin = new Vector2(64, 64);
+			body.Scale = 0.5f;
 
 			gun = new DefaultGun(this);
 			components.Add(gun);
 
 			healthBar = new HealthBar(this);
 			components.Add(healthBar);
+		}
 
-			score = new ScoreHandler();
+		protected override void SetAttributes()
+		{
+			Health = 100;
+			attributes.MaxHealth = 100;
+			attributes.BodyDamage = 25;
+			attributes.BulletSpeed = 5;
+			attributes.BulletPenetration = 5;
+			attributes.BulletDamage = 25;
 		}
 
 		protected override void OnDestroyEntity(Entity entity)

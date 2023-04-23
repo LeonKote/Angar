@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Angar
+namespace Angar.Entities
 {
 	public class ScoreHandler
 	{
-		int lvl = 1;
-		int exp;
-		int nextLvlExp;
-		int lastLvlExp;
+		private int lvl = 1;
+		private int exp;
+		private int nextLvlExp;
+		private int lastLvlExp;
 
 		public int Lvl
 		{

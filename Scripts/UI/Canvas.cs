@@ -8,11 +8,16 @@ namespace Angar.UI
 {
 	public partial class Canvas
 	{
-		public HashSet<UIElement> elements = new HashSet<UIElement>();
+		private HashSet<UIElement> elements = new HashSet<UIElement>();
 
 		private static Canvas instance;
+		private static bool isActive;
+		private static bool isClicked;
+
+		public event Action<int> AttributeAdded;
 
 		public static Canvas Instance { get { return instance; } }
+		public static bool IsActive { get { return isActive; } }
 
 		public Canvas()
 		{
@@ -22,9 +27,19 @@ namespace Angar.UI
 
 		public void Update()
 		{
+			isClicked = false;
 			foreach (UIElement element in elements)
 			{
 				if (element.IsActive) element.Update();
+			}
+
+			if (isClicked)
+			{
+				isActive = true;
+			}
+			else if (Input.GetMouseButtonDown(0))
+			{
+				isActive = false;
 			}
 		}
 
@@ -38,12 +53,22 @@ namespace Angar.UI
 			Globals.spriteBatch.End();
 		}
 
+		private void OnAbilityAdded(int id)
+		{
+			AttributeAdded.Invoke(id);
+		}
+
 		public void SetScale(float scale)
 		{
 			foreach (UIElement element in elements)
 			{
 				element.LocalScale = scale;
 			}
+		}
+
+		public static void SetActive()
+		{
+			isClicked = true;
 		}
 	}
 }

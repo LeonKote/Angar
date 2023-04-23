@@ -25,6 +25,7 @@ namespace Angar
 			robot.Color = new Color(0, 178, 225);
 			robot.ScoreChanged += OnScoreChanged;
 			World.Instance.AddEntity(robot);
+			Canvas.Instance.AttributeAdded += OnAttributeAdd;
 
 			camera = new Camera();
 
@@ -37,6 +38,22 @@ namespace Angar
 			SetBackgroundStartVec();
 			RotateAndShoot();
 			Move();
+
+			if (Input.GetButtonDown(Keys.Q))
+			{
+				for (int i = 0; i < 50; i++)
+				{
+					Polygon point = new Polygon();
+					point.Position = robot.Position + new Vector2(Utils.RandomSingle(-1024, 1024), Utils.RandomSingle(-1024, 1024));
+					World.Instance.Entities.Add(point);
+				}
+			}
+			else if (Input.GetButtonDown(Keys.E))
+			{
+				Enemy enemy = new Enemy();
+				enemy.Position = robot.Position + new Vector2(Utils.RandomSingle(-512, 512), Utils.RandomSingle(-512, 512));
+				World.Instance.Entities.Add(enemy);
+			}
 		}
 
 		private void OnScoreChanged(ScoreHandler score)
@@ -48,6 +65,18 @@ namespace Angar
 			scoreBar.Value = score.Exp - score.LastLvlExp;
 
 			scoreText.Text = score.Lvl + "  LVL";
+		}
+
+		private void OnAttributeAdd(int id)
+		{
+			ProgressBar progressBar = (ProgressBar)Canvas.Instance.AbilitiesPanel.Childs[id];
+
+			progressBar.Value++;
+
+			robot.Attributes.AddPoint((Attributes)id);
+
+			if (progressBar.Value == 7)
+				((ImageButton)progressBar.Childs[1]).Interactable = false;
 		}
 
 		private void SetCameraPosition()
@@ -67,7 +96,7 @@ namespace Angar
 
 			robot.Rotation = MathF.Atan2(mousePos.Y - robot.Position.Y, mousePos.X - robot.Position.X);
 
-			if (Input.GetMouseButton(0))
+			if (Input.GetMouseButton(0) && !Canvas.IsActive)
 			{
 				Vector2 rotVec = mousePos - robot.Position;
 				rotVec.Normalize();
@@ -88,7 +117,7 @@ namespace Angar
 			if (movement.LengthSquared() > 0)
 			{
 				movement.Normalize();
-				robot.AddForce(movement * 0.25f);
+				robot.AddForce(movement * 0.25f * (robot.Attributes.MovementSpeed * 0.1f + 1));
 			}
 		}
 

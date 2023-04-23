@@ -13,42 +13,54 @@ namespace Angar.Entities
 		private Vector2 position;
 		protected Vector2 movement;
 		protected float friction;
-
-		protected int maxHealth;
-		protected int health;
-		protected int bodyDamage;
+		private float health;
 		private float nextCollision;
 
+		protected Timer regenTimer;
 		protected Anim hurtAnim;
 		protected Anim destroyAnim;
 
 		protected HashSet<Component> components = new HashSet<Component>();
 		protected Body body;
+		protected HealthBar healthBar;
+
+		protected AttributesHandler attributes;
+		protected ClosestEntitiesHandler closestEntities = new ClosestEntitiesHandler();
 
 		public Vector2 Position { get { return position; } set { position = value; } }
 		public Vector2 Movement { get { return movement; } }
 		public Color Color { get { return body.NativeColor; } set { body.NativeColor = value; } }
-		public int MaxHealth { get { return maxHealth; } set { maxHealth = value; } }
-		public int Health { get { return health; } set { health = value; } }
-
-		protected ClosestEntitiesHandler closestEntities = new ClosestEntitiesHandler();
+		public float Health { get { return health; } set { health = value; } }
+		public AttributesHandler Attributes { get { return attributes; } }
 
 		public Entity()
 		{
+			attributes = new AttributesHandler(this);
+			SetAttributes();
+
 			body = new Body(this);
 			components.Add(body);
 
+			regenTimer = new Timer();
+			regenTimer.Duration = 3;
+			regenTimer.WhileEnded += UpdateRegen;
+
 			hurtAnim = new Anim();
 			hurtAnim.Duration = 0.25f;
-			hurtAnim.OnPlaying += OnHurtAnim;
+			hurtAnim.Playing += OnHurtAnim;
 
 			destroyAnim = new Anim();
 			destroyAnim.Duration = 0.25f;
-			destroyAnim.OnPlaying += OnDestroyAnim;
-			destroyAnim.OnEnd += () =>
+			destroyAnim.Playing += OnDestroyAnim;
+			destroyAnim.Ended += () =>
 			{
 				World.Instance.RemoveEntity(this);
 			};
+		}
+
+		protected virtual void SetAttributes()
+		{
+
 		}
 
 		public virtual void Update()
@@ -63,6 +75,7 @@ namespace Angar.Entities
 
 			UpdateCollisions();
 
+			regenTimer.Update();
 			hurtAnim.Update();
 			destroyAnim.Update();
 		}
@@ -78,7 +91,7 @@ namespace Angar.Entities
 				if (entity == this || entity.destroyAnim.IsPlaying) continue;
 
 				float dist = Vector2.DistanceSquared(entity.position, this.position);
-				float size = entity.body.realSize + this.body.realSize;
+				float size = entity.body.RealSize + this.body.RealSize;
 
 				closestEntities.HandleEntity(entity, dist);
 
@@ -94,27 +107,40 @@ namespace Angar.Entities
 			}
 		}
 
+		private void UpdateRegen()
+		{
+			if (health == attributes.MaxHealth) return;
+
+			float regen = (attributes.HealthRegen + 1) * 0.1f;
+			if (health + regen < attributes.MaxHealth)
+				health += regen;
+			else health = attributes.MaxHealth;
+
+			healthBar?.UpdateHealthImmediate();
+		}
+
 		protected virtual void OnCollision(Entity entity, Vector2 vec)
 		{
-			if (this is Projectile && entity is Projectile)
-			{
-				if ((this as Projectile).Parent == (entity as Projectile).Parent) return;
-			}
+			if (this is Projectile projecttile1 && entity is Projectile projecttile2
+				&& projecttile1.Parent == projecttile2.Parent) return;
 
-			entity.health -= bodyDamage;
-			if (entity.health <= 0)
+			entity.Health -= this.attributes.BodyDamage;
+			entity.regenTimer.Reset();
+			entity.healthBar?.UpdateHealth();
+
+			if (entity.Health <= 0)
 			{
-				OnDestroyEntity(entity);
+				this.OnDestroyEntity(entity);
 				entity.destroyAnim.Play();
 			}
 
 			if (this is not Projectile)
 			{
-				AddForce(vec * 2);
-				hurtAnim.Play();
+				this.AddForce(vec * 2);
+				this.hurtAnim.Play();
 			}
 
-			nextCollision = Globals.time + 0.5f;
+			this.nextCollision = Globals.time + 0.5f;
 		}
 
 		protected virtual void OnDestroyEntity(Entity entity)

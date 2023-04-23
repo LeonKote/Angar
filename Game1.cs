@@ -25,7 +25,7 @@ namespace Angar
 			_graphics.PreferredBackBufferHeight = 720;
 
 			Window.AllowUserResizing = true;
-			Window.ClientSizeChanged += OnClientSizeChanged;
+			Window.ClientSizeChanged += (sender, e) => OnClientSizeChanged();
 		}
 
 		protected override void Initialize()
@@ -45,8 +45,10 @@ namespace Angar
 			Atlas.Init(Content);
 
 			world = new World();
-			player = new Player();
 			canvas = new Canvas();
+			player = new Player();
+
+			OnClientSizeChanged();
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -57,9 +59,9 @@ namespace Angar
 			// TODO: Add your update logic here
 			Globals.SetGameTime(gameTime);
 			Input.Update();
+			canvas.Update();
 			player.Update();
 			world.Update();
-			canvas.Update();
 
 			base.Update(gameTime);
 		}
@@ -76,7 +78,7 @@ namespace Angar
 			base.Draw(gameTime);
 		}
 
-		private void OnClientSizeChanged(object sender, EventArgs e)
+		private void OnClientSizeChanged()
 		{
 			Rectangle bounds = GraphicsDevice.Viewport.Bounds;
 			float scale = MathF.Max(bounds.Width / Globals.nativeResolution.X, bounds.Height / Globals.nativeResolution.Y);

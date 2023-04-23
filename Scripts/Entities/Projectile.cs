@@ -19,13 +19,9 @@ namespace Angar.Entities
 		{
 			friction = 1.0f;
 
-			maxHealth = 10;
-			health = 10;
-			bodyDamage = 25;
-
-			body.Texture = Atlas.Projecttile;
-			body.Origin = new Vector2(32, 32);
-			body.Scale = 0.5f;
+			body.Texture = Utils.GetOutlineTexture(Atlas.Circle, 0.25f);
+			body.Origin = new Vector2(64, 64);
+			body.Scale = 0.25f;
 		}
 
 		public override void Update()

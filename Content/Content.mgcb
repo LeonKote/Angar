@@ -61,12 +61,12 @@
 /processorParam:TextureFormat=Color
 /build:Components/projecttile.png
 
-#begin Fonts/Rubik-Medium.spritefont
+#begin Fonts/Rubik-Bold.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Fonts/Rubik-Medium.spritefont
+/build:Fonts/Rubik-Bold.spritefont
 
 #begin Primitives/circle.png
 /importer:TextureImporter
@@ -91,6 +91,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Primitives/rect.png
+
+#begin Primitives/roundedRect.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Primitives/roundedRect.png
+
+#begin UI/barAdd.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/barAdd.png
 
 #begin World/cell.png
 /importer:TextureImporter

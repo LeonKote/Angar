@@ -15,23 +15,15 @@ namespace Angar
 		private float duration;
 		private float currentValue;
 		private float startValue;
-		private float endValue = 1f;
+		private float endValue = 1.0f;
 
-		public event Action<float> OnPlaying;
-		public event Action OnEnd;
+		public event Action<float> Playing;
+		public event Action Ended;
 
 		public bool IsPlaying { get { return isPlaying; } }
 		public bool IsCurve { get { return isCurve; } set { isCurve = value; } }
 		public float Duration { get { return duration; } set { duration = value; } }
-		public float CurrentValue
-		{
-			get { return currentValue; }
-			set
-			{
-				currentValue = value;
-				endValue = value;
-			}
-		}
+		public float CurrentValue { get { return currentValue; } set { currentValue = value; } }
 		public float EndValue { get { return endValue; } }
 
 		public void Update()
@@ -44,14 +36,14 @@ namespace Angar
 				if (isCurve) t = t * t * (3f - 2f * t);
 				currentValue = MathHelper.Lerp(startValue, endValue, t);
 				time += Globals.deltaTime;
-				OnPlaying.Invoke(currentValue);
+				Playing.Invoke(currentValue);
 			}
 			else
 			{
 				currentValue = endValue;
 				isPlaying = false;
-				OnPlaying.Invoke(currentValue);
-				OnEnd?.Invoke();
+				Playing.Invoke(currentValue);
+				Ended?.Invoke();
 			}
 		}
 

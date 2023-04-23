@@ -32,7 +32,7 @@ namespace Angar.Entities
 
 		private void RotateAndShoot(Entity entity)
 		{
-			Vector2 pos = entity.Position + entity.Movement * gun.Power * 10;
+			Vector2 pos = entity.Position; // + entity.Movement * gun.Power * 10;
 			float target = MathF.Atan2(pos.Y - Position.Y, pos.X - Position.X);
 
 			Rotation = Utils.LerpAngle(gun.Rotation, target, Globals.deltaTime * 10);

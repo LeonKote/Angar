@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Angar
 {
-	public class Utils
+	public static class Utils
 	{
 		private static Random rand = new Random();
 
@@ -52,6 +53,20 @@ namespace Angar
 			}
 
 			return vec;
+		}
+
+		public static Texture2D GetOutlineTexture(Texture2D texture, float scale)
+		{
+			Vector2 size = new Vector2(texture.Width, texture.Height) * 0.5f;
+			RenderTarget2D renderTarget = new RenderTarget2D(Globals.graphicsDevice, texture.Width, texture.Height);
+			Globals.graphicsDevice.SetRenderTarget(renderTarget);
+			Globals.graphicsDevice.Clear(Color.Transparent);
+			Globals.spriteBatch.Begin();
+			Globals.spriteBatch.Draw(texture, size, null, SetAlpha(Color.White * 0.75f, 255), 0, size, 1, SpriteEffects.None, 0);
+			Globals.spriteBatch.Draw(texture, size, null, Color.White, 0, size, 1 - 0.075f / scale, SpriteEffects.None, 0);
+			Globals.spriteBatch.End();
+			Globals.graphicsDevice.SetRenderTarget(null);
+			return renderTarget;
 		}
 	}
 }

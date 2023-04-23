@@ -9,15 +9,15 @@ namespace Angar.UI
 {
 	public static class Align
 	{
-		public static Vector2 TopLeft = new Vector2(0, 0);
-		public static Vector2 Top = new Vector2(0.5f, 0);
-		public static Vector2 TopRight = new Vector2(1, 0);
-		public static Vector2 Left = new Vector2(0, 0.5f);
-		public static Vector2 Center = new Vector2(0.5f, 0.5f);
-		public static Vector2 Right = new Vector2(1, 0.5f);
-		public static Vector2 BottomLeft = new Vector2(0, 1);
-		public static Vector2 Bottom = new Vector2(0.5f, 1);
-		public static Vector2 BottomRight = new Vector2(1, 1);
+		public static readonly Vector2 TopLeft = new Vector2(0, 0);
+		public static readonly Vector2 Top = new Vector2(0.5f, 0);
+		public static readonly Vector2 TopRight = new Vector2(1, 0);
+		public static readonly Vector2 Left = new Vector2(0, 0.5f);
+		public static readonly Vector2 Center = new Vector2(0.5f, 0.5f);
+		public static readonly Vector2 Right = new Vector2(1, 0.5f);
+		public static readonly Vector2 BottomLeft = new Vector2(0, 1);
+		public static readonly Vector2 Bottom = new Vector2(0.5f, 1);
+		public static readonly Vector2 BottomRight = new Vector2(1, 1);
 	}
 
 	public abstract class UIElement
@@ -29,11 +29,14 @@ namespace Angar.UI
 		private Vector2 anchor;
 		protected Vector2 origin;
 		protected float scale;
-		private float localScale = 1f;
+		private float localScale = 1.0f;
 		private bool isActive = true;
 		private UIElement parent;
 
-		private HashSet<UIElement> childs = new HashSet<UIElement>();
+		protected bool isHover;
+		protected bool isDown;
+
+		private List<UIElement> childs = new List<UIElement>();
 
 		public Vector2 Position
 		{
@@ -91,12 +94,48 @@ namespace Angar.UI
 		}
 
 		public bool IsActive { get { return isActive; } set { isActive = value; } }
+		public List<UIElement> Childs { get { return childs; } }
 
 		public virtual void Update()
 		{
 			foreach (UIElement child in childs)
 			{
-				if (child.IsActive) child.Draw();
+				if (child.IsActive) child.Update();
+			}
+
+			UpdateMouse();
+		}
+
+		private void UpdateMouse()
+		{
+			if (rect.Contains(Input.MousePosition))
+			{
+				if (Input.GetMouseButtonDown(0))
+				{
+					OnPointerClick();
+					isDown = true;
+					Canvas.SetActive();
+				}
+
+				if (!isHover)
+				{
+					OnPointerEnter();
+					isHover = true;
+				}
+			}
+			else
+			{
+				if (isHover)
+				{
+					OnPointerExit();
+					isHover = false;
+				}
+			}
+
+			if (isDown && !Input.GetMouseButton(0))
+			{
+				OnPointerUp();
+				isDown = false;
 			}
 		}
 
@@ -138,6 +177,26 @@ namespace Angar.UI
 			element.parent = this;
 			element.ApplyTransform();
 			childs.Add(element);
+		}
+
+		protected virtual void OnPointerClick()
+		{
+
+		}
+
+		protected virtual void OnPointerEnter()
+		{
+
+		}
+
+		protected virtual void OnPointerExit()
+		{
+
+		}
+
+		protected virtual void OnPointerUp()
+		{
+
 		}
 	}
 }

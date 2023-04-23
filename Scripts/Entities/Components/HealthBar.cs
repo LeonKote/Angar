@@ -18,6 +18,8 @@ namespace Angar.Entities.Components
 		private Bar backgroundBar;
 		private Bar foregroundBar;
 		private Anim anim;
+		private Anim fadeAnim;
+		private bool isShown;
 
 		private Vector2 offset;
 
@@ -41,13 +43,15 @@ namespace Angar.Entities.Components
 
 				offset = nativeOffset * value;
 				backgroundBar.Size = new Vector2(nativeSize.X * value, nativeSize.Y);
-				foregroundBar.Width = (backgroundBar.Size.X - innerSizeOffset.X) * value / entity.MaxHealth * anim.CurrentValue;
+				UpdateWidth(anim.CurrentValue);
 			}
 		}
 
 		public HealthBar(Entity entity) : base(entity)
 		{
 			offset = nativeOffset;
+
+			entity.Attributes.AttributeChanged += OnAttributeChanged;
 
 			backgroundBar = new Bar();
 			backgroundBar.Size = nativeSize;
@@ -59,21 +63,57 @@ namespace Angar.Entities.Components
 			foregroundBar.Color = new Color(133, 227, 125);
 			foregroundBar.LayerDepth = 0.7f;
 
+			Color = Utils.SetAlpha(Color, 0);
+
 			anim = new Anim();
 			anim.Duration = 0.1f;
 			anim.IsCurve = true;
 			anim.CurrentValue = entity.Health;
-			anim.OnPlaying += (float t) =>
+			anim.Playing += UpdateWidth;
+
+			fadeAnim = new Anim();
+			fadeAnim.Duration = 0.25f;
+			fadeAnim.Playing += OnFade;
+		}
+
+		private void OnFade(float t)
+		{
+			t *= 255;
+			if (!isShown) t = 255 - t;
+			Color = Utils.SetAlpha(Color, (byte)t);
+		}
+
+		private void OnAttributeChanged(Attributes attribute)
+		{
+			if (attribute != Attributes.MaxHealth) return;
+			anim.CurrentValue = entity.Health;
+		}
+
+		private void UpdateWidth(float t)
+		{
+			if (entity.Health < entity.Attributes.MaxHealth)
 			{
-				foregroundBar.Width = (backgroundBar.Size.X - innerSizeOffset.X) * Scale / entity.MaxHealth * t;
-			};
+				if (!isShown)
+				{
+					fadeAnim.Play();
+					isShown = true;
+				}
+			}
+			else
+			{
+				if (isShown)
+				{
+					fadeAnim.Play();
+					isShown = false;
+				}
+			}
+			foregroundBar.Width = (backgroundBar.Size.X - innerSizeOffset.X) * Scale / entity.Attributes.MaxHealth * t;
 		}
 
 		public override void Update()
 		{
-			if (MathF.Abs(entity.Health - anim.EndValue) > 1) anim.Play(entity.Health);
-
 			anim.Update();
+			fadeAnim.Update();
 		}
 
 		public override void Draw()
@@ -82,6 +122,17 @@ namespace Angar.Entities.Components
 			foregroundBar.Position = entity.Position + offset + innerPositionOffset;
 			backgroundBar.Draw();
 			foregroundBar.Draw();
+		}
+
+		public void UpdateHealth()
+		{
+			anim.Play(entity.Health);
+		}
+
+		public void UpdateHealthImmediate()
+		{
+			anim.CurrentValue = entity.Health;
+			UpdateWidth(anim.CurrentValue);
 		}
 	}
 }

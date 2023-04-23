@@ -10,7 +10,7 @@ namespace Angar
 {
 	public static class Globals
 	{
-		public static readonly Vector2 nativeResolution = new Vector2(1280, 720);
+		public static readonly Vector2 nativeResolution = new Vector2(1920, 1080);
 		public static GraphicsDevice graphicsDevice;
 		public static SpriteBatch spriteBatch;
 		public static float deltaTime;

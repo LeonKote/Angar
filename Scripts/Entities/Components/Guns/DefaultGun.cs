@@ -16,9 +16,6 @@ namespace Angar.Entities.Components.Guns
 
 		public DefaultGun(Entity entity) : base(entity)
 		{
-			Power = 5.0f;
-			Delay = 0.5f;
-
 			Texture = Atlas.Gun;
 			NativeColor = new Color(153, 153, 153);
 			Origin = new Vector2(-32, 32);

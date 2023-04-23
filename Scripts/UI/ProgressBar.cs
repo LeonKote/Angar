@@ -10,14 +10,16 @@ namespace Angar.UI
 {
 	public class ProgressBar : UIElement
 	{
-		private static readonly Point innerPositionOffset = new Point(4, 4);
-		private static readonly Point innerSizeOffset = new Point(8, 8);
+		private Point innerPositionOffset = new Point(4, 4);
+		private Point innerSizeOffset = new Point(8, 8);
 
 		private float maxValue;
 
 		private Bar backgroundBar;
 		private Bar foregroundBar;
 		private Anim anim;
+
+		public Color Color { get { return foregroundBar.Color; } set { foregroundBar.Color = value; } }
 
 		public int MaxValue
 		{
@@ -40,22 +42,22 @@ namespace Angar.UI
 		public ProgressBar()
 		{
 			backgroundBar = new Bar();
-			backgroundBar.Color = new Color(85, 85, 85) * 0.75f;
+			backgroundBar.Color = new Color(85, 85, 85) * 0.9f;
 
 			foregroundBar = new Bar();
-			foregroundBar.Color = new Color(255, 232, 105) * 0.9f;
 
 			anim = new Anim();
 			anim.Duration = 0.25f;
 			anim.IsCurve = true;
-			anim.OnPlaying += (float t) =>
+			anim.Playing += (float t) =>
 			{
-				foregroundBar.Width = (rect.Size.X - innerSizeOffset.X) / maxValue * t;
+				foregroundBar.Width = (rect.Width - innerSizeOffset.X) / maxValue * t;
 			};
 		}
 
 		public override void Update()
 		{
+			base.Update();
 			anim.Update();
 		}
 
@@ -69,8 +71,10 @@ namespace Angar.UI
 		protected override void ApplyTransform()
 		{
 			base.ApplyTransform();
+			innerPositionOffset = new Point(rect.Height / 8);
+			innerSizeOffset = new Point(innerPositionOffset.X * 2);
 			backgroundBar.Rect = rect;
-			foregroundBar.Rect = new Rectangle(rect.Location + innerPositionOffset, new Point(rect.Height, rect.Height) - innerSizeOffset);
+			foregroundBar.Rect = new Rectangle(rect.Location + innerPositionOffset, new Point((int)((rect.Width - innerSizeOffset.X) / maxValue * anim.CurrentValue), rect.Height - innerSizeOffset.Y));
 		}
 	}
 }

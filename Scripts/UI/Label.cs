@@ -10,6 +10,8 @@ namespace Angar.UI
 {
 	public class Label : UIElement
 	{
+		private static readonly Color shadowColor = new Color(85, 85, 85);
+
 		private string text;
 		private SpriteFont font;
 		private Vector2 textOrigin;
@@ -28,6 +30,7 @@ namespace Angar.UI
 
 		public override void Draw()
 		{
+			Globals.spriteBatch.DrawString(font, text, position + Vector2.One, shadowColor, 0, textOrigin, scale, SpriteEffects.None, 0);
 			Globals.spriteBatch.DrawString(font, text, position, Color.White, 0, textOrigin, scale, SpriteEffects.None, 0);
 			base.Draw();
 		}

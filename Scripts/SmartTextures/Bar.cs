@@ -10,9 +10,9 @@ namespace Angar.SmartTextures
 {
 	public class Bar
 	{
-		private static readonly Rectangle leftCircleSourceRect = new Rectangle(0, 0, 32, 64);
-		private static readonly Rectangle rightCircleSourceRect = new Rectangle(32, 0, 32, 64);
-		private static readonly Vector2 offset = new Vector2(32, 0);
+		private static readonly Rectangle leftCircleSourceRect = new Rectangle(0, 0, 64, 128);
+		private static readonly Rectangle rightCircleSourceRect = new Rectangle(64, 0, 64, 128);
+		private static readonly Vector2 offset = new Vector2(64, 0);
 
 		private Vector2 position;
 		private Vector2 size;
@@ -60,7 +60,9 @@ namespace Angar.SmartTextures
 			{
 				size = value;
 
-				circleScale = size.Y / 64;
+				if (size.X < size.Y) size.X = size.Y;
+
+				circleScale = size.Y / 128;
 
 				middlePos = position + offset * circleScale;
 				middleScale = size - offset * circleScale * 2;
