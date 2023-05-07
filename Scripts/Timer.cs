@@ -36,7 +36,7 @@ namespace Angar
 			}
 		}
 
-		public void Reset()
+		public void Start()
 		{
 			this.time = 0;
 			this.isPlaying = true;

@@ -1,5 +1,5 @@
 ﻿using Angar.Entities.Components;
-using Angar.Entities.Components.Guns;
+using Angar.Entities.Polygons;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Angar.Entities
 {
-    public class Robot : Entity
+	public class Robot : Entity
 	{
-		protected Gun gun;
+		public GunSet gunSet;
 
 		private ScoreHandler score = new ScoreHandler();
 
-		public float Rotation { get { return gun.Rotation; } set { gun.Rotation = value; } }
+		public float Rotation { get { return gunSet.Rotation; } set { gunSet.Rotation = value; } }
 
 		public event Action<ScoreHandler> ScoreChanged;
 
@@ -27,8 +27,8 @@ namespace Angar.Entities
 			body.Origin = new Vector2(64, 64);
 			body.Scale = 0.5f;
 
-			gun = new DefaultGun(this);
-			components.Add(gun);
+			gunSet = new StandardGunSet(this);
+			components.Add(gunSet);
 
 			healthBar = new HealthBar(this);
 			components.Add(healthBar);
@@ -55,7 +55,7 @@ namespace Angar.Entities
 
 		public void Shoot(Vector2 vec)
 		{
-			gun.Shoot(vec);
+			gunSet.ShootDelay(vec);
 		}
 	}
 }

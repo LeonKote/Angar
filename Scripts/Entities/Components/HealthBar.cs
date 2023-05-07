@@ -124,15 +124,14 @@ namespace Angar.Entities.Components
 			foregroundBar.Draw();
 		}
 
-		public void UpdateHealth()
+		public void UpdateHealth(bool immediate = false)
 		{
-			anim.Play(entity.Health);
-		}
-
-		public void UpdateHealthImmediate()
-		{
-			anim.CurrentValue = entity.Health;
-			UpdateWidth(anim.CurrentValue);
+			if (immediate)
+			{
+				anim.CurrentValue = entity.Health;
+				UpdateWidth(anim.CurrentValue);
+			}
+			else anim.Play(entity.Health);
 		}
 	}
 }

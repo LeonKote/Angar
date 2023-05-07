@@ -14,6 +14,7 @@ namespace Angar
 		private World world;
 		private Player player;
 		private Canvas canvas;
+		private Tutorial tutorial;
 
 		public Game1()
 		{
@@ -47,6 +48,7 @@ namespace Angar
 			world = new World();
 			canvas = new Canvas();
 			player = new Player();
+			tutorial = new Tutorial();
 
 			OnClientSizeChanged();
 		}

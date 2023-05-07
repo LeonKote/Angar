@@ -20,19 +20,20 @@ namespace Angar.UI
 		private Anim anim;
 
 		public Color Color { get { return foregroundBar.Color; } set { foregroundBar.Color = value; } }
+		public Color BackgroundColor { get { return backgroundBar.Color; } set { backgroundBar.Color = value; } }
 
-		public int MaxValue
+		public float MaxValue
 		{
-			get { return (int)maxValue; }
+			get { return maxValue; }
 			set
 			{
 				maxValue = value;
 			}
 		}
 
-		public int Value
+		public float Value
 		{
-			get { return (int)anim.EndValue; }
+			get { return anim.EndValue; }
 			set
 			{
 				anim.Play(value);
@@ -49,10 +50,7 @@ namespace Angar.UI
 			anim = new Anim();
 			anim.Duration = 0.25f;
 			anim.IsCurve = true;
-			anim.Playing += (float t) =>
-			{
-				foregroundBar.Width = (rect.Width - innerSizeOffset.X) / maxValue * t;
-			};
+			anim.Playing += UpdateWidth;
 		}
 
 		public override void Update()
@@ -75,6 +73,17 @@ namespace Angar.UI
 			innerSizeOffset = new Point(innerPositionOffset.X * 2);
 			backgroundBar.Rect = rect;
 			foregroundBar.Rect = new Rectangle(rect.Location + innerPositionOffset, new Point((int)((rect.Width - innerSizeOffset.X) / maxValue * anim.CurrentValue), rect.Height - innerSizeOffset.Y));
+		}
+
+		private void UpdateWidth(float t)
+		{
+			foregroundBar.Width = (rect.Width - innerSizeOffset.X) / maxValue * t;
+		}
+
+		public void UpdateImmediate(float t)
+		{
+			anim.CurrentValue = t;
+			UpdateWidth(t);
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace Angar.Entities.Components
 		private Color nativeColor = Color.White;
 
 		public virtual Color Color { get; set; } = Color.White;
-		public float Rotation { get; set; }
+		public virtual float Rotation { get; set; }
 		public Vector2 Origin { get; set; }
 		public virtual float Scale { get; set; } = 1.0f;
 		public float LayerDepth { get; set; }

@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,8 @@ namespace Angar.Entities.Components
 	public class Body : Component
 	{
 		private Texture2D texture;
-		private float realSize;
+		private float nativeSize;
+		private float size;
 
 		public Texture2D Texture
 		{
@@ -19,7 +19,7 @@ namespace Angar.Entities.Components
 			set
 			{
 				texture = value;
-				realSize = texture.Width * 0.5f;
+				nativeSize = texture.Width * 0.5f;
 			}
 		}
 
@@ -29,11 +29,12 @@ namespace Angar.Entities.Components
 			set
 			{
 				base.Scale = value;
-				realSize = Texture.Width * 0.5f * value;
+				size = nativeSize * value;
 			}
 		}
 
-		public float RealSize { get { return realSize; } }
+		public float Size { get { return size; } }
+		public float NativeSize { get { return nativeSize; } set { nativeSize = value; } }
 
 		public Body(Entity entity) : base(entity)
 		{

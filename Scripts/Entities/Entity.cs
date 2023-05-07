@@ -20,18 +20,31 @@ namespace Angar.Entities
 		protected Anim hurtAnim;
 		protected Anim destroyAnim;
 
-		protected HashSet<Component> components = new HashSet<Component>();
+		public HashSet<Component> components = new HashSet<Component>();
 		protected Body body;
 		protected HealthBar healthBar;
 
 		protected AttributesHandler attributes;
-		protected ClosestEntitiesHandler closestEntities = new ClosestEntitiesHandler();
 
 		public Vector2 Position { get { return position; } set { position = value; } }
 		public Vector2 Movement { get { return movement; } }
 		public Color Color { get { return body.NativeColor; } set { body.NativeColor = value; } }
 		public float Health { get { return health; } set { health = value; } }
 		public AttributesHandler Attributes { get { return attributes; } }
+
+		public float Scale
+		{
+			get { return body.Scale; }
+			set
+			{
+				float diff = value / body.Scale;
+				body.Scale = value;
+				foreach (Component component in components)
+				{
+					component.Scale *= diff;
+				}
+			}
+		}
 
 		public Entity()
 		{
@@ -84,16 +97,12 @@ namespace Angar.Entities
 		{
 			if (destroyAnim.IsPlaying || Globals.time < this.nextCollision) return;
 
-			closestEntities.Clear();
-
 			foreach (Entity entity in World.Instance.Entities)
 			{
 				if (entity == this || entity.destroyAnim.IsPlaying) continue;
 
 				float dist = Vector2.DistanceSquared(entity.position, this.position);
-				float size = entity.body.RealSize + this.body.RealSize;
-
-				closestEntities.HandleEntity(entity, dist);
+				float size = entity.body.Size + this.body.Size;
 
 				if (dist < size * size)
 				{
@@ -116,7 +125,7 @@ namespace Angar.Entities
 				health += regen;
 			else health = attributes.MaxHealth;
 
-			healthBar?.UpdateHealthImmediate();
+			healthBar?.UpdateHealth(true);
 		}
 
 		protected virtual void OnCollision(Entity entity, Vector2 vec)
@@ -125,7 +134,7 @@ namespace Angar.Entities
 				&& projecttile1.Parent == projecttile2.Parent) return;
 
 			entity.Health -= this.attributes.BodyDamage;
-			entity.regenTimer.Reset();
+			entity.regenTimer.Start();
 			entity.healthBar?.UpdateHealth();
 
 			if (entity.Health <= 0)
@@ -155,7 +164,7 @@ namespace Angar.Entities
 				if (t < 0.25f)
 					component.Color = Utils.SetAlpha(Color.White, component.Color.A);
 				else
-					component.Color = Utils.Lerp(Color.Red, component.NativeColor, component.Color.A, t);
+					component.Color = Utils.LerpColor(Color.Red, component.NativeColor, component.Color.A, t);
 			}
 		}
 

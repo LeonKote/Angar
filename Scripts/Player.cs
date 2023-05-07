@@ -1,4 +1,6 @@
 ﻿using Angar.Entities;
+using Angar.Entities.Components;
+using Angar.Entities.Polygons;
 using Angar.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,13 +21,16 @@ namespace Angar
 		private Vector2 startVec;
 		private Vector2 endSize;
 
+		private int lvl = 1;
+		private int spentLvls;
+
 		public Player()
 		{
 			robot = new Robot();
 			robot.Color = new Color(0, 178, 225);
 			robot.ScoreChanged += OnScoreChanged;
 			World.Instance.AddEntity(robot);
-			Canvas.Instance.AttributeAdded += OnAttributeAdd;
+			Canvas.Instance.AttributesPanel.AttributeAdded += OnAttributeAdd;
 
 			camera = new Camera();
 
@@ -41,9 +46,15 @@ namespace Angar
 
 			if (Input.GetButtonDown(Keys.Q))
 			{
-				for (int i = 0; i < 50; i++)
+				for (int i = 0; i < 25; i++)
 				{
-					Polygon point = new Polygon();
+					SquarePolygon point = new SquarePolygon();
+					point.Position = robot.Position + new Vector2(Utils.RandomSingle(-1024, 1024), Utils.RandomSingle(-1024, 1024));
+					World.Instance.Entities.Add(point);
+				}
+				for (int i = 0; i < 25; i++)
+				{
+					TrianglePolygon point = new TrianglePolygon();
 					point.Position = robot.Position + new Vector2(Utils.RandomSingle(-1024, 1024), Utils.RandomSingle(-1024, 1024));
 					World.Instance.Entities.Add(point);
 				}
@@ -53,6 +64,12 @@ namespace Angar
 				Enemy enemy = new Enemy();
 				enemy.Position = robot.Position + new Vector2(Utils.RandomSingle(-512, 512), Utils.RandomSingle(-512, 512));
 				World.Instance.Entities.Add(enemy);
+			}
+			else if (Input.GetButtonDown(Keys.R))
+			{
+				robot.components.Remove(robot.gunSet);
+				robot.gunSet = new TwinGunSet(robot);
+				robot.components.Add(robot.gunSet);
 			}
 		}
 
@@ -65,11 +82,22 @@ namespace Angar
 			scoreBar.Value = score.Exp - score.LastLvlExp;
 
 			scoreText.Text = score.Lvl + "  LVL";
+
+			if (score.Lvl - lvl > 0)
+			{
+				Canvas.Instance.AttributesPanel.Show();
+
+				lvl = score.Lvl;
+
+				Tutorial.Instance.SetProgress(TutorialStage.Lvl5, score.Lvl * 20);
+			}
+
+			Tutorial.Instance.AddProgress(TutorialStage.Destroy, 50);
 		}
 
 		private void OnAttributeAdd(int id)
 		{
-			ProgressBar progressBar = (ProgressBar)Canvas.Instance.AbilitiesPanel.Childs[id];
+			ProgressBar progressBar = (ProgressBar)Canvas.Instance.AttributesPanel.Childs[id];
 
 			progressBar.Value++;
 
@@ -77,6 +105,15 @@ namespace Angar
 
 			if (progressBar.Value == 7)
 				((ImageButton)progressBar.Childs[1]).Interactable = false;
+
+			spentLvls++;
+
+			if (spentLvls == lvl - 1)
+			{
+				Canvas.Instance.AttributesPanel.Hide();
+			}
+
+			Tutorial.Instance.AddProgress(TutorialStage.AddAttribute, 100);
 		}
 
 		private void SetCameraPosition()
@@ -118,6 +155,7 @@ namespace Angar
 			{
 				movement.Normalize();
 				robot.AddForce(movement * 0.25f * (robot.Attributes.MovementSpeed * 0.1f + 1));
+				Tutorial.Instance.AddProgress(TutorialStage.Move, 0.5f, true);
 			}
 		}
 

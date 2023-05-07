@@ -37,7 +37,7 @@
 /processorParam:TextureFormat=Color
 /build:Components/gun.png
 
-#begin Components/polygon1.png
+#begin Components/gun1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -47,7 +47,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Components/polygon1.png
+/build:Components/gun1.png
 
 #begin Components/projecttile.png
 /importer:TextureImporter
@@ -103,6 +103,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Primitives/roundedRect.png
+
+#begin Primitives/triangle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Primitives/triangle.png
 
 #begin UI/barAdd.png
 /importer:TextureImporter

@@ -20,7 +20,7 @@ namespace Angar.Entities
 		{
 			base.Update();
 
-			WrappedEntity wrappedEntity = closestEntities.Get<Robot>();
+			WrappedEntity wrappedEntity = null;
 			if (wrappedEntity == null) return;
 
 			Robot player = wrappedEntity.entity as Robot;
@@ -35,7 +35,7 @@ namespace Angar.Entities
 			Vector2 pos = entity.Position; // + entity.Movement * gun.Power * 10;
 			float target = MathF.Atan2(pos.Y - Position.Y, pos.X - Position.X);
 
-			Rotation = Utils.LerpAngle(gun.Rotation, target, Globals.deltaTime * 10);
+			Rotation = Utils.LerpAngle(gunSet.Rotation, target, Globals.deltaTime * 10);
 
 			if (MathF.Abs(target - Rotation) < 0.5f)
 			{

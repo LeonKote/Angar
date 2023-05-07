@@ -10,10 +10,10 @@ namespace Angar.SmartTextures
 {
 	public class RoundedRect
 	{
-		private static readonly Rectangle topLeftCicleSourceRect = new Rectangle(0, 0, 32, 32);
-		private static readonly Rectangle topRightCicleSourceRect = new Rectangle(32, 0, 32, 32);
-		private static readonly Rectangle bottomLeftCicleSourceRect = new Rectangle(0, 32, 32, 32);
-		private static readonly Rectangle bottomRightCicleSourceRect = new Rectangle(32, 32, 32, 32);
+		private static readonly Rectangle topLeftCicleSourceRect = new Rectangle(0, 0, 64, 64);
+		private static readonly Rectangle topRightCicleSourceRect = new Rectangle(64, 0, 64, 64);
+		private static readonly Rectangle bottomLeftCicleSourceRect = new Rectangle(0, 64, 64, 64);
+		private static readonly Rectangle bottomRightCicleSourceRect = new Rectangle(64, 64, 64, 64);
 
 		private Texture2D rectTexture;
 		private Texture2D circleTexture;
@@ -25,7 +25,7 @@ namespace Angar.SmartTextures
 		private Rectangle bottomLeftCircle;
 		private Rectangle bottomRect;
 		private Rectangle bottomRightCircle;
-		private int radius = 20;
+		private int radius = 10;
 
 		private Rectangle rect;
 		private Color color;

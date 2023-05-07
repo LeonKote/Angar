@@ -14,8 +14,6 @@ namespace Angar.UI
 		private static bool isActive;
 		private static bool isClicked;
 
-		public event Action<int> AttributeAdded;
-
 		public static Canvas Instance { get { return instance; } }
 		public static bool IsActive { get { return isActive; } }
 
@@ -51,11 +49,6 @@ namespace Angar.UI
 				if (element.IsActive) element.Draw();
 			}
 			Globals.spriteBatch.End();
-		}
-
-		private void OnAbilityAdded(int id)
-		{
-			AttributeAdded.Invoke(id);
 		}
 
 		public void SetScale(float scale)

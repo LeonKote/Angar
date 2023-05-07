@@ -19,7 +19,7 @@ namespace Angar
 		public static void SetGameTime(GameTime gameTime)
 		{
 			deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-			time = (float)gameTime.TotalGameTime.TotalSeconds;
+			time += deltaTime;
 		}
 	}
 }

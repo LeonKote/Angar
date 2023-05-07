@@ -17,7 +17,7 @@ namespace Angar
 			return rand.NextSingle() * (max - min) + min;
 		}
 
-		public static Color Lerp(Color value1, Color value2, int alpha, float amount)
+		public static Color LerpColor(Color value1, Color value2, int alpha, float amount)
 		{
 			return new Color((int)MathHelper.Lerp(value1.R, value2.R, amount), (int)MathHelper.Lerp(value1.G, value2.G, amount), (int)MathHelper.Lerp(value1.B, value2.B, amount), alpha);
 		}
@@ -57,13 +57,18 @@ namespace Angar
 
 		public static Texture2D GetOutlineTexture(Texture2D texture, float scale)
 		{
+			return GetOutlineTexture(texture, scale, Vector2.Zero);
+		}
+
+		public static Texture2D GetOutlineTexture(Texture2D texture, float scale, Vector2 offset)
+		{
 			Vector2 size = new Vector2(texture.Width, texture.Height) * 0.5f;
 			RenderTarget2D renderTarget = new RenderTarget2D(Globals.graphicsDevice, texture.Width, texture.Height);
 			Globals.graphicsDevice.SetRenderTarget(renderTarget);
 			Globals.graphicsDevice.Clear(Color.Transparent);
 			Globals.spriteBatch.Begin();
 			Globals.spriteBatch.Draw(texture, size, null, SetAlpha(Color.White * 0.75f, 255), 0, size, 1, SpriteEffects.None, 0);
-			Globals.spriteBatch.Draw(texture, size, null, Color.White, 0, size, 1 - 0.075f / scale, SpriteEffects.None, 0);
+			Globals.spriteBatch.Draw(texture, size + offset * (1 / scale), null, Color.White, 0, size, 1 - 0.075f / scale, SpriteEffects.None, 0);
 			Globals.spriteBatch.End();
 			Globals.graphicsDevice.SetRenderTarget(null);
 			return renderTarget;

@@ -10,18 +10,16 @@ namespace Angar.Entities
 	public class Projectile : Entity
 	{
 		private float deathTime;
-		private Entity parent;
 
-		public Entity Parent { get { return parent; } set { parent = value; } }
-		public float LifeTime { set { deathTime = Globals.time + value; } }
+		public Entity Parent { get; set; }
 
 		public Projectile()
 		{
 			friction = 1.0f;
+			deathTime = Globals.time + 3;
 
 			body.Texture = Utils.GetOutlineTexture(Atlas.Circle, 0.25f);
 			body.Origin = new Vector2(64, 64);
-			body.Scale = 0.25f;
 		}
 
 		public override void Update()
