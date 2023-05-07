@@ -54,7 +54,7 @@ namespace Angar.UI
 
 		public override void Draw()
 		{
-			Globals.spriteBatch.Draw(texture, rect, color);
+			Globals.SpriteBatch.Draw(texture, rect, color);
 			base.Draw();
 		}
 

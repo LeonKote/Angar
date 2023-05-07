@@ -54,20 +54,20 @@ namespace Angar.SmartTextures
 
 		public RoundedRect()
 		{
-			rectTexture = Atlas.Rect;
-			circleTexture = Atlas.Circle;
+			rectTexture = Resources.Rect;
+			circleTexture = Resources.Circle;
 			color = Color.White;
 		}
 
 		public void Draw()
 		{
-			Globals.spriteBatch.Draw(circleTexture, topLeftCircle, topLeftCicleSourceRect, color);
-			Globals.spriteBatch.Draw(rectTexture, topRect, color);
-			Globals.spriteBatch.Draw(circleTexture, topRightCircle, topRightCicleSourceRect, color);
-			Globals.spriteBatch.Draw(rectTexture, centerRect, color);
-			Globals.spriteBatch.Draw(circleTexture, bottomLeftCircle, bottomLeftCicleSourceRect, color);
-			Globals.spriteBatch.Draw(rectTexture, bottomRect, color);
-			Globals.spriteBatch.Draw(circleTexture, bottomRightCircle, bottomRightCicleSourceRect, color);
+			Globals.SpriteBatch.Draw(circleTexture, topLeftCircle, topLeftCicleSourceRect, color);
+			Globals.SpriteBatch.Draw(rectTexture, topRect, color);
+			Globals.SpriteBatch.Draw(circleTexture, topRightCircle, topRightCicleSourceRect, color);
+			Globals.SpriteBatch.Draw(rectTexture, centerRect, color);
+			Globals.SpriteBatch.Draw(circleTexture, bottomLeftCircle, bottomLeftCicleSourceRect, color);
+			Globals.SpriteBatch.Draw(rectTexture, bottomRect, color);
+			Globals.SpriteBatch.Draw(circleTexture, bottomRightCircle, bottomRightCicleSourceRect, color);
 		}
 	}
 }

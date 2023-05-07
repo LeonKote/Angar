@@ -77,9 +77,9 @@ namespace Angar.Entities.Components
 
 		public void ShootDelay(Vector2 vec)
 		{
-			if (Globals.time < nextShot) return;
+			if (Globals.Time < nextShot) return;
 			Shoot(vec);
-			nextShot = Globals.time + shootingDelay - entity.Attributes.Reload * 0.01f;
+			nextShot = Globals.Time + shootingDelay - entity.Attributes.Reload * 0.01f;
 		}
 
 		protected virtual void Shoot(Vector2 vec)

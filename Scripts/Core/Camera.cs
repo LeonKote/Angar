@@ -49,7 +49,7 @@ namespace Angar
 
 		private void UpdateMatrix()
 		{
-			Rectangle bounds = Globals.graphicsDevice.Viewport.Bounds;
+			Rectangle bounds = Globals.GraphicsDevice.Viewport.Bounds;
 
 			transformMatrix = Matrix.CreateTranslation(new Vector3(-position.X, -position.Y, 0))
 				* Matrix.CreateScale(zoom, zoom, 1)

@@ -91,16 +91,16 @@ namespace Angar.SmartTextures
 
 		public Bar()
 		{
-			rectTexture = Atlas.Rect;
-			circleTexture = Atlas.Circle;
+			rectTexture = Resources.Rect;
+			circleTexture = Resources.Circle;
 			color = Color.White;
 		}
 
 		public void Draw()
 		{
-			Globals.spriteBatch.Draw(rectTexture, middlePos, null, color, 0, Vector2.Zero, middleScale, SpriteEffects.None, layerDepth);
-			Globals.spriteBatch.Draw(circleTexture, leftCirclePos, leftCircleSourceRect, color, 0, Vector2.Zero, circleScale, SpriteEffects.None, layerDepth);
-			Globals.spriteBatch.Draw(circleTexture, rightCirclePos, rightCircleSourceRect, color, 0, Vector2.Zero, circleScale, SpriteEffects.None, layerDepth);
+			Globals.SpriteBatch.Draw(rectTexture, middlePos, null, color, 0, Vector2.Zero, middleScale, SpriteEffects.None, layerDepth);
+			Globals.SpriteBatch.Draw(circleTexture, leftCirclePos, leftCircleSourceRect, color, 0, Vector2.Zero, circleScale, SpriteEffects.None, layerDepth);
+			Globals.SpriteBatch.Draw(circleTexture, rightCirclePos, rightCircleSourceRect, color, 0, Vector2.Zero, circleScale, SpriteEffects.None, layerDepth);
 		}
 	}
 }

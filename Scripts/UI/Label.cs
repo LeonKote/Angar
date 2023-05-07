@@ -30,8 +30,8 @@ namespace Angar.UI
 
 		public override void Draw()
 		{
-			Globals.spriteBatch.DrawString(font, text, position + Vector2.One, shadowColor, 0, textOrigin, scale, SpriteEffects.None, 0);
-			Globals.spriteBatch.DrawString(font, text, position, Color.White, 0, textOrigin, scale, SpriteEffects.None, 0);
+			Globals.SpriteBatch.DrawString(font, text, position + Vector2.One, shadowColor, 0, textOrigin, scale, SpriteEffects.None, 0);
+			Globals.SpriteBatch.DrawString(font, text, position, Color.White, 0, textOrigin, scale, SpriteEffects.None, 0);
 			base.Draw();
 		}
 	}

@@ -35,7 +35,7 @@ namespace Angar
 				float t = time / duration;
 				if (isCurve) t = t * t * (3f - 2f * t);
 				currentValue = MathHelper.Lerp(startValue, endValue, t);
-				time += Globals.deltaTime;
+				time += Globals.DeltaTime;
 				Playing.Invoke(currentValue);
 			}
 			else

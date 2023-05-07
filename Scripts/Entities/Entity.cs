@@ -95,7 +95,7 @@ namespace Angar.Entities
 
 		private void UpdateCollisions()
 		{
-			if (destroyAnim.IsPlaying || Globals.time < this.nextCollision) return;
+			if (destroyAnim.IsPlaying || Globals.Time < this.nextCollision) return;
 
 			foreach (Entity entity in World.Instance.Entities)
 			{
@@ -149,7 +149,7 @@ namespace Angar.Entities
 				this.hurtAnim.Play();
 			}
 
-			this.nextCollision = Globals.time + 0.5f;
+			this.nextCollision = Globals.Time + 0.5f;
 		}
 
 		protected virtual void OnDestroyEntity(Entity entity)

@@ -23,7 +23,7 @@ namespace Angar.Entities
 		{
 			friction = 0.95f;
 
-			body.Texture = Utils.GetOutlineTexture(Atlas.Circle, 0.5f);
+			body.Texture = Utils.GetOutlineTexture(Resources.Circle, 0.5f);
 			body.Origin = new Vector2(64, 64);
 			body.Scale = 0.5f;
 

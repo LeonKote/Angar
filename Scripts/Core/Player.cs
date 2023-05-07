@@ -34,7 +34,7 @@ namespace Angar
 
 			camera = new Camera();
 
-			endSize = Globals.nativeResolution + new Vector2(32, 32);
+			endSize = Globals.NativeResolution + new Vector2(32, 32);
 		}
 
 		public void Update()
@@ -118,7 +118,7 @@ namespace Angar
 
 		private void SetCameraPosition()
 		{
-			camera.Position = Vector2.Lerp(camera.Position, robot.Position, Globals.deltaTime * 5);
+			camera.Position = Vector2.Lerp(camera.Position, robot.Position, Globals.DeltaTime * 5);
 		}
 
 		private void SetBackgroundStartVec()
@@ -161,15 +161,15 @@ namespace Angar
 
 		public void Draw()
 		{
-			Globals.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.TransformMatrix);
+			Globals.SpriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.TransformMatrix);
 			for (int x = 0; x < endSize.X; x += 32)
 			{
 				for (int y = 0; y < endSize.Y; y += 32)
 				{
-					Globals.spriteBatch.Draw(Atlas.Cell, startVec + new Vector2(x, y), Color.White);
+					Globals.SpriteBatch.Draw(Resources.Cell, startVec + new Vector2(x, y), Color.White);
 				}
 			}
-			Globals.spriteBatch.End();
+			Globals.SpriteBatch.End();
 		}
 
 		public void SetCameraZoom(float scale)

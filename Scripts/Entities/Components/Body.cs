@@ -43,7 +43,7 @@ namespace Angar.Entities.Components
 
 		public override void Draw()
 		{
-			Globals.spriteBatch.Draw(Texture, entity.Position, null, Color, Rotation, Origin, Scale, SpriteEffects.None, LayerDepth);
+			Globals.SpriteBatch.Draw(Texture, entity.Position, null, Color, Rotation, Origin, Scale, SpriteEffects.None, LayerDepth);
 		}
 	}
 }

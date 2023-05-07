@@ -16,9 +16,9 @@ namespace Angar.Entities
 		public Projectile()
 		{
 			friction = 1.0f;
-			deathTime = Globals.time + 3;
+			deathTime = Globals.Time + 3;
 
-			body.Texture = Utils.GetOutlineTexture(Atlas.Circle, 0.25f);
+			body.Texture = Utils.GetOutlineTexture(Resources.Circle, 0.25f);
 			body.Origin = new Vector2(64, 64);
 		}
 
@@ -26,7 +26,7 @@ namespace Angar.Entities
 		{
 			base.Update();
 
-			if (!destroyAnim.IsPlaying && Globals.time > deathTime)
+			if (!destroyAnim.IsPlaying && Globals.Time > deathTime)
 			{
 				destroyAnim.Play();
 			}

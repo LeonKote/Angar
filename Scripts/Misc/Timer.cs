@@ -27,7 +27,7 @@ namespace Angar
 
 			if (time < duration)
 			{
-				time += Globals.deltaTime;
+				time += Globals.DeltaTime;
 			}
 			else
 			{

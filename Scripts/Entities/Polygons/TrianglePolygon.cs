@@ -11,7 +11,7 @@ namespace Angar.Entities.Polygons
 	{
 		public TrianglePolygon()
 		{
-			body.Texture = Atlas.Polygon2;
+			body.Texture = Resources.Polygon2;
 			body.NativeSize = 16;
 			body.NativeColor = new Color(252, 118, 119);
 			body.Origin = new Vector2(32, 45);

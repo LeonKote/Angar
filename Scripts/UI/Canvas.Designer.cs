@@ -33,7 +33,7 @@ namespace Angar.UI
 			ScoreText = new Label();
 			ScoreText.Anchor = Align.Center;
 			ScoreText.Origin = Align.Center;
-			ScoreText.Font = Atlas.Rubik;
+			ScoreText.Font = Resources.Rubik;
 			ScoreText.Text = "1  LVL";
 			ScoreText.LocalScale = 0.5f;
 			ScoreBar.AddChild(ScoreText);

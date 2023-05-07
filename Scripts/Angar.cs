@@ -6,7 +6,7 @@ using System;
 
 namespace Angar
 {
-	public class Game1 : Game
+	public class Angar : Game
 	{
 		private GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;
@@ -16,7 +16,7 @@ namespace Angar
 		private Canvas canvas;
 		private Tutorial tutorial;
 
-		public Game1()
+		public Angar()
 		{
 			_graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
@@ -41,9 +41,9 @@ namespace Angar
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			// TODO: use this.Content to load your game content here
-			Globals.graphicsDevice = GraphicsDevice;
-			Globals.spriteBatch = _spriteBatch;
-			Atlas.Init(Content);
+			Globals.GraphicsDevice = GraphicsDevice;
+			Globals.SpriteBatch = _spriteBatch;
+			Resources.Init(Content);
 
 			world = new World();
 			canvas = new Canvas();
@@ -83,7 +83,7 @@ namespace Angar
 		private void OnClientSizeChanged()
 		{
 			Rectangle bounds = GraphicsDevice.Viewport.Bounds;
-			float scale = MathF.Max(bounds.Width / Globals.nativeResolution.X, bounds.Height / Globals.nativeResolution.Y);
+			float scale = MathF.Max(bounds.Width / Globals.NativeResolution.X, bounds.Height / Globals.NativeResolution.Y);
 			player.SetCameraZoom(scale);
 			canvas.SetScale(scale);
 		}

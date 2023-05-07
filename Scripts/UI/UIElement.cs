@@ -158,7 +158,7 @@ namespace Angar.UI
 			}
 			else
 			{
-				position = Globals.graphicsDevice.Viewport.Bounds.Size.ToVector2() * anchor + localPosition;
+				position = Globals.GraphicsDevice.Viewport.Bounds.Size.ToVector2() * anchor + localPosition;
 			}
 
 			Vector2 realSize = size * scale;

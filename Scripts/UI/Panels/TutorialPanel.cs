@@ -22,7 +22,7 @@ namespace Angar.UI
 			label.LocalPosition = new Vector2(35, 20);
 			label.Anchor = Align.TopLeft;
 			label.Origin = Align.TopLeft;
-			label.Font = Atlas.Rubik;
+			label.Font = Resources.Rubik;
 			label.LocalScale = 0.5f;
 			AddChild(label);
 

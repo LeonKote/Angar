@@ -36,12 +36,12 @@ namespace Angar
 
 		public void Draw()
 		{
-			Globals.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, null, null, null, null, Camera.Instance.TransformMatrix);
+			Globals.SpriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, null, null, null, null, Camera.Instance.TransformMatrix);
 			foreach (Entity entity in entities)
 			{
 				entity.Draw();
 			}
-			Globals.spriteBatch.End();
+			Globals.SpriteBatch.End();
 		}
 
 		public void AddEntity(Entity entity)

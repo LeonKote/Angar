@@ -11,7 +11,7 @@ namespace Angar.Entities.Polygons
 	{
 		public SquarePolygon()
 		{
-			body.Texture = Atlas.Polygon1;
+			body.Texture = Resources.Polygon1;
 			body.NativeColor = new Color(255, 232, 105);
 			body.Origin = new Vector2(32, 32);
 			body.Scale = 0.75f;

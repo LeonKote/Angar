@@ -56,7 +56,7 @@ namespace Angar.UI
 				Label label = new Label();
 				label.Anchor = Align.Center;
 				label.Origin = Align.Center;
-				label.Font = Atlas.Rubik;
+				label.Font = Resources.Rubik;
 				label.Text = attributeTexts[i];
 				label.LocalScale = 0.45f;
 				bar.AddChild(label);
@@ -64,7 +64,7 @@ namespace Angar.UI
 				ImageButton button = new ImageButton();
 				button.LocalPosition = new Vector2(-3, 0);
 				button.Size = new Vector2(36, 18);
-				button.Texture = Atlas.BarAdd;
+				button.Texture = Resources.BarAdd;
 				button.NativeColor = attributeColors[i];
 				button.Anchor = Align.Right;
 				button.Origin = Align.Right;

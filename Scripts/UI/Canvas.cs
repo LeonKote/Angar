@@ -43,12 +43,12 @@ namespace Angar.UI
 
 		public void Draw()
 		{
-			Globals.spriteBatch.Begin();
+			Globals.SpriteBatch.Begin();
 			foreach (UIElement element in elements)
 			{
 				if (element.IsActive) element.Draw();
 			}
-			Globals.spriteBatch.End();
+			Globals.SpriteBatch.End();
 		}
 
 		public void SetScale(float scale)
