@@ -13,6 +13,7 @@ namespace Angar.Entities
 		private Vector2 position;
 		protected Vector2 movement;
 		protected float friction;
+		private float scale = 1.0f;
 		private float health;
 		private float nextCollision;
 
@@ -20,28 +21,30 @@ namespace Angar.Entities
 		protected Anim hurtAnim;
 		protected Anim destroyAnim;
 
-		public HashSet<Component> components = new HashSet<Component>();
+		public HashSet<Component> components = new HashSet<Component>(); // protected
 		protected Body body;
 		protected HealthBar healthBar;
 
 		protected AttributesHandler attributes;
 
+		public event Action<Entity> Destroyed;
+
 		public Vector2 Position { get { return position; } set { position = value; } }
 		public Vector2 Movement { get { return movement; } }
 		public Color Color { get { return body.NativeColor; } set { body.NativeColor = value; } }
 		public float Health { get { return health; } set { health = value; } }
-		public AttributesHandler Attributes { get { return attributes; } }
+		public AttributesHandler Attributes { get { return attributes; } set { attributes = value; } }
 
 		public float Scale
 		{
-			get { return body.Scale; }
+			get { return scale; }
 			set
 			{
-				float diff = value / body.Scale;
-				body.Scale = value;
+				float diff = value / scale;
+				scale = value;
 				foreach (Component component in components)
 				{
-					component.Scale *= diff;
+					component.SetScale(component.Scale * diff);
 				}
 			}
 		}
@@ -68,6 +71,18 @@ namespace Angar.Entities
 			destroyAnim.Ended += () =>
 			{
 				World.Instance.RemoveEntity(this);
+			};
+
+			Destroyed += (Entity destroyer) =>
+			{
+				if (destroyer is Robot robot)
+				{
+					robot.OnDestroyEntity(this);
+				}
+				else if (destroyer is Projectile projectile)
+				{
+					(projectile.Parent as Robot)?.OnDestroyEntity(this);
+				}
 			};
 		}
 
@@ -139,7 +154,7 @@ namespace Angar.Entities
 
 			if (entity.Health <= 0)
 			{
-				this.OnDestroyEntity(entity);
+				entity.Destroyed?.Invoke(this);
 				entity.destroyAnim.Play();
 			}
 
@@ -150,11 +165,6 @@ namespace Angar.Entities
 			}
 
 			this.nextCollision = Globals.Time + 0.5f;
-		}
-
-		protected virtual void OnDestroyEntity(Entity entity)
-		{
-			(this as Projectile)?.Parent.OnDestroyEntity(entity);
 		}
 
 		private void OnHurtAnim(float t)

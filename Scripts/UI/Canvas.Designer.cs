@@ -14,6 +14,7 @@ namespace Angar.UI
 		public Label ScoreText;
 		public TutorialPanel TutorialPanel;
 		public AttributesPanel AttributesPanel;
+		public MinimapPanel MinimapPanel;
 
 		private void InitializeComponent()
 		{
@@ -56,6 +57,15 @@ namespace Angar.UI
 			AttributesPanel.Anchor = Align.BottomLeft;
 			AttributesPanel.Origin = Align.BottomLeft;
 			elements.Add(AttributesPanel);
+			//
+			// AbilitiesPanel
+			//
+			MinimapPanel = new MinimapPanel();
+			MinimapPanel.LocalPosition = new Vector2(-20, -20);
+			MinimapPanel.Size = new Vector2(200, 200);
+			MinimapPanel.Anchor = Align.BottomRight;
+			MinimapPanel.Origin = Align.BottomRight;
+			elements.Add(MinimapPanel);
 		}
 	}
 }

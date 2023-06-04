@@ -21,6 +21,8 @@ namespace Angar
 		public static Texture2D Triangle;
 		public static Texture2D Polygon1;
 		public static Texture2D Polygon2;
+		public static Texture2D Minimap;
+		public static Texture2D MinimapPlayer;
 
 		public static void Init(ContentManager content)
 		{
@@ -32,6 +34,8 @@ namespace Angar
 			RoundedRect = content.Load<Texture2D>("Primitives/roundedRect");
 			RoundedRect2 = content.Load<Texture2D>("Primitives/roundedRect2");
 			Triangle = content.Load<Texture2D>("Primitives/triangle");
+			Minimap = content.Load<Texture2D>("UI/minimap");
+			MinimapPlayer = content.Load<Texture2D>("UI/minimapPlayer");
 
 			Polygon1 = Utils.GetOutlineTexture(RoundedRect, 0.4f);
 			Polygon2 = Utils.GetOutlineTexture(Triangle, 0.3f, new Vector2(0, 1));

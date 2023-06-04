@@ -3,7 +3,6 @@ using Angar.Entities.Components;
 using Angar.Entities.Polygons;
 using Angar.UI;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -17,34 +16,40 @@ namespace Angar
 	{
 		private Robot robot;
 		private Camera camera;
+		private Background background;
 
-		private Vector2 startVec;
-		private Vector2 endSize;
+		private static Player instance;
 
 		private int lvl = 1;
 		private int spentLvls;
 
+		public Robot Robot { get { return robot; } }
+		public static Player Instance { get { return instance; } }
+
 		public Player()
 		{
-			robot = new Robot();
-			robot.Color = new Color(0, 178, 225);
-			robot.ScoreChanged += OnScoreChanged;
-			World.Instance.AddEntity(robot);
-			Canvas.Instance.AttributesPanel.AttributeAdded += OnAttributeAdd;
-
+			instance = this;
 			camera = new Camera();
 
-			endSize = Globals.NativeResolution + new Vector2(32, 32);
+			SpawnPlayer();
+			Canvas.Instance.AttributesPanel.AttributeAdded += OnAttributeAdd;
+			
+			background = new Background(camera);
 		}
 
 		public void Update()
 		{
 			SetCameraPosition();
-			SetBackgroundStartVec();
 			RotateAndShoot();
 			Move();
+			background.Update();
 
-			if (Input.GetButtonDown(Keys.Q))
+
+			// ==================== REFACTORING NEEDED ====================
+			Canvas.Instance.MinimapPanel.SetPos(robot.Position);
+			Canvas.Instance.MinimapPanel.SetRot(robot.Rotation);
+
+			if (Input.GetButtonDown(Keys.Q)) // Spawn polygons
 			{
 				for (int i = 0; i < 25; i++)
 				{
@@ -59,18 +64,65 @@ namespace Angar
 					World.Instance.Entities.Add(point);
 				}
 			}
-			else if (Input.GetButtonDown(Keys.E))
+			else if (Input.GetButtonDown(Keys.E)) // Spawn enemy
 			{
 				Enemy enemy = new Enemy();
 				enemy.Position = robot.Position + new Vector2(Utils.RandomSingle(-512, 512), Utils.RandomSingle(-512, 512));
 				World.Instance.Entities.Add(enemy);
 			}
-			else if (Input.GetButtonDown(Keys.R))
+			else if (Input.GetButtonDown(Keys.R)) // Grow player
 			{
+				robot.Scale *= 1.01f;
+				camera.Zoom *= 0.99f;
+				background.Size *= 1.01f;
+			}
+			else if (Input.GetButtonDown(Keys.T)) // Set twin gun
+			{
+				float scale = robot.gunSet.Scale;
 				robot.components.Remove(robot.gunSet);
 				robot.gunSet = new TwinGunSet(robot);
+				robot.gunSet.SetScale(scale);
 				robot.components.Add(robot.gunSet);
 			}
+			else if (Input.GetButtonDown(Keys.Y)) // Set sniper gun
+			{
+				float scale = robot.gunSet.Scale;
+				robot.components.Remove(robot.gunSet);
+				robot.gunSet = new SniperGunSet(robot);
+				robot.gunSet.SetScale(scale);
+				robot.components.Add(robot.gunSet);
+			}
+			else if (Input.GetButtonDown(Keys.U)) // Set standard gun
+			{
+				float scale = robot.gunSet.Scale;
+				robot.components.Remove(robot.gunSet);
+				robot.gunSet = new StandardGunSet(robot);
+				robot.gunSet.SetScale(scale);
+				robot.components.Add(robot.gunSet);
+			}
+			// ==================== REFACTORING NEEDED ====================
+		}
+
+		private void SpawnPlayer()
+		{
+			robot = new Robot();
+			robot.Color = new Color(0, 178, 225);
+			robot.Destroyed += OnDestroy;
+			robot.ScoreChanged += OnScoreChanged;
+			World.Instance.AddEntity(robot);
+
+			camera.Zoom = 1.0f;
+		}
+
+		private void OnDestroy(Entity destroyer)
+		{
+			AttributesHandler attributes = robot.Attributes;
+			ScoreHandler score = robot.Score;
+
+			SpawnPlayer();
+			robot.Attributes = attributes;
+			robot.Score = score;
+			robot.Position = Utils.RandomRect();
 		}
 
 		private void OnScoreChanged(ScoreHandler score)
@@ -90,6 +142,7 @@ namespace Angar
 				lvl = score.Lvl;
 
 				Tutorial.Instance.SetProgress(TutorialStage.Lvl5, score.Lvl * 20);
+				Tutorial.Instance.SetProgress(TutorialStage.Lvl10, score.Lvl * 10);
 			}
 
 			Tutorial.Instance.AddProgress(TutorialStage.Destroy, 50);
@@ -119,12 +172,6 @@ namespace Angar
 		private void SetCameraPosition()
 		{
 			camera.Position = Vector2.Lerp(camera.Position, robot.Position, Globals.DeltaTime * 5);
-		}
-
-		private void SetBackgroundStartVec()
-		{
-			startVec = camera.ScreenToWorldPoint(Vector2.Zero);
-			startVec = new Vector2(MathF.Floor(startVec.X / 32) * 32, MathF.Floor(startVec.Y / 32) * 32);
 		}
 
 		private void RotateAndShoot()
@@ -161,15 +208,7 @@ namespace Angar
 
 		public void Draw()
 		{
-			Globals.SpriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.TransformMatrix);
-			for (int x = 0; x < endSize.X; x += 32)
-			{
-				for (int y = 0; y < endSize.Y; y += 32)
-				{
-					Globals.SpriteBatch.Draw(Resources.Cell, startVec + new Vector2(x, y), Color.White);
-				}
-			}
-			Globals.SpriteBatch.End();
+			background.Draw();
 		}
 
 		public void SetCameraZoom(float scale)

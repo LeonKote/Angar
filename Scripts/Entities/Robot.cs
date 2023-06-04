@@ -11,13 +11,14 @@ namespace Angar.Entities
 {
 	public class Robot : Entity
 	{
-		public GunSet gunSet;
+		public GunSet gunSet; // protected
 
 		private ScoreHandler score = new ScoreHandler();
 
-		public float Rotation { get { return gunSet.Rotation; } set { gunSet.Rotation = value; } }
-
 		public event Action<ScoreHandler> ScoreChanged;
+
+		public float Rotation { get { return gunSet.Rotation; } set { gunSet.Rotation = value; } }
+		public ScoreHandler Score { get { return score; } set { score = value; } }
 
 		public Robot()
 		{
@@ -44,11 +45,16 @@ namespace Angar.Entities
 			attributes.BulletDamage = 25;
 		}
 
-		protected override void OnDestroyEntity(Entity entity)
+		public void OnDestroyEntity(Entity entity)
 		{
-			if (entity is Polygon)
+			if (entity is Polygon polygon)
 			{
-				score.Exp += ((Polygon)entity).Score;
+				score.Exp += polygon.Score;
+				ScoreChanged?.Invoke(score);
+			}
+			else if (entity is Robot robot)
+			{
+				score.Exp += 40;
 				ScoreChanged?.Invoke(score);
 			}
 		}

@@ -45,5 +45,11 @@ namespace Angar.Entities.Components
 		{
 			Globals.SpriteBatch.Draw(Texture, entity.Position, null, Color, Rotation, Origin, Scale, SpriteEffects.None, LayerDepth);
 		}
+
+		public override void SetScale(float scale)
+		{
+			Scale = scale;
+			Texture = Utils.GetOutlineTexture(Resources.Circle, scale);
+		}
 	}
 }

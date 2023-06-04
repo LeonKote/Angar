@@ -7,18 +7,20 @@ using System.Threading.Tasks;
 
 namespace Angar.Entities.Components
 {
-	public class StandardGunSet : GunSet
+	public class SniperGunSet : GunSet
 	{
 		private StandardGun gun;
 
-		public StandardGunSet(Entity entity) : base(entity)
+		public SniperGunSet(Entity entity) : base(entity)
 		{
-			shootingDelay = 0.5f;
+			shootingDelay = 0.75f;
 
 			gun = new StandardGun(entity);
-			gun.SourceRect = new Rectangle(64, 0, 64, 64);
+			gun.SourceRect = new Rectangle(48, 0, 80, 64);
 			gun.IdlePosition = new Vector2(-64, 32);
 			gun.ShootPosition = new Vector2(-48, 32);
+			gun.BulletSpeed = 1.5f;
+			gun.Knockback = 1.5f;
 			guns.Add(gun);
 		}
 	}

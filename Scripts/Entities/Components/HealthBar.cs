@@ -107,7 +107,7 @@ namespace Angar.Entities.Components
 					isShown = false;
 				}
 			}
-			foregroundBar.Width = (backgroundBar.Size.X - innerSizeOffset.X) * Scale / entity.Attributes.MaxHealth * t;
+			foregroundBar.Width = (backgroundBar.Size.X - innerSizeOffset.X) / entity.Attributes.MaxHealth * t;
 		}
 
 		public override void Update()

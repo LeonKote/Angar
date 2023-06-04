@@ -19,6 +19,7 @@ namespace Angar.Entities.Components
 			shootingDelay = 0.25f;
 
 			firstGun = new StandardGun(entity);
+			firstGun.SourceRect = new Rectangle(64, 0, 64, 64);
 			firstGun.Angle = -MathF.PI / 15;
 			firstGun.IdlePosition = new Vector2(-32, 66);
 			firstGun.ShootPosition = new Vector2(-16, 66);
@@ -26,6 +27,7 @@ namespace Angar.Entities.Components
 			guns.Add(firstGun);
 
 			secondGun = new StandardGun(entity);
+			secondGun.SourceRect = new Rectangle(64, 0, 64, 64);
 			secondGun.Angle = MathF.PI / 15;
 			secondGun.IdlePosition = new Vector2(-32, -2);
 			secondGun.ShootPosition = new Vector2(-16, -2);

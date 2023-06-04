@@ -75,6 +75,16 @@ namespace Angar.Entities.Components
 			}
 		}
 
+		public override void SetScale(float scale)
+		{
+			float diff = scale / this.scale;
+			this.scale = scale;
+			foreach (Gun gun in guns)
+			{
+				gun.SetScale(gun.Scale * diff);
+			}
+		}
+
 		public void ShootDelay(Vector2 vec)
 		{
 			if (Globals.Time < nextShot) return;

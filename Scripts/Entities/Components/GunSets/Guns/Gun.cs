@@ -17,6 +17,8 @@ namespace Angar.Entities.Components
 		public Rectangle SourceRect { get; set; }
 		public float Angle { get; set; }
 		public Vector2 ShootPosition { get; set; }
+		public float BulletSpeed { get; set; } = 1.0f;
+		public float Knockback { get; set; } = 0.5f;
 
 		public Vector2 IdlePosition
 		{
@@ -63,19 +65,19 @@ namespace Angar.Entities.Components
 			projectile.Attributes.BodyDamage = entity.Attributes.BulletDamage;
 			if (Angle == 0)
 			{
-				projectile.Position = entity.Position + vec * 75;
+				projectile.Position = entity.Position + vec * entity.Scale * 60;
 			}
 			else
 			{
 				(float sin, float cos) = MathF.SinCos(Rotation + Angle);
-				projectile.Position = entity.Position + new Vector2(cos, sin) * 75;
+				projectile.Position = entity.Position + new Vector2(cos, sin) * entity.Scale * 60;
 			}
 			projectile.Color = entity.Color;
-			projectile.Scale = entity.Scale * 0.9f;
+			projectile.Scale = entity.Scale * 0.25f;
 			projectile.Parent = entity;
-			projectile.AddForce(vec * entity.Attributes.BulletSpeed);
+			projectile.AddForce(vec * BulletSpeed * entity.Attributes.BulletSpeed);
 			World.Instance.AddEntity(projectile);
-			entity.AddForce(-vec * 0.5f);
+			entity.AddForce(-vec * Knockback);
 			anim.Play();
 		}
 	}
