@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Angar.Entities
 {
-	public class Robot : Entity
+	public class Tank : Entity
 	{
 		public GunSet gunSet; // protected
 
@@ -20,7 +20,7 @@ namespace Angar.Entities
 		public float Rotation { get { return gunSet.Rotation; } set { gunSet.Rotation = value; } }
 		public ScoreHandler Score { get { return score; } set { score = value; } }
 
-		public Robot()
+		public Tank()
 		{
 			friction = 0.95f;
 
@@ -52,7 +52,7 @@ namespace Angar.Entities
 				score.Exp += polygon.Score;
 				ScoreChanged?.Invoke(score);
 			}
-			else if (entity is Robot robot)
+			else if (entity is Tank tank)
 			{
 				score.Exp += 40;
 				ScoreChanged?.Invoke(score);

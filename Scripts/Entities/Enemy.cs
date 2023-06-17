@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Angar.Entities
 {
-	public class Enemy : Robot
+	public class Enemy : Tank
 	{
 		private Vector2 target = new Vector2(1000);
 
@@ -20,7 +20,7 @@ namespace Angar.Entities
 		{
 			base.Update();
 
-			Robot player = Player.Instance.Robot;
+			Tank player = Player.Instance.Tank;
 			if (player == null) return;
 
 			RotateAndShoot(player);

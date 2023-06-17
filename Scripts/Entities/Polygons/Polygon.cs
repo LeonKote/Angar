@@ -19,10 +19,10 @@ namespace Angar.Entities.Polygons
 		public Polygon()
 		{
 			friction = 1.0f;
-			movement = new Vector2(Utils.RandomSingle(-0.1f, 0.1f), Utils.RandomSingle(-0.1f, 0.1f));
-			rotMovement = Utils.RandomSingle(-0.005f, 0.005f);
+			movement = new Vector2(Utils.RandomFloat(-0.1f, 0.1f), Utils.RandomFloat(-0.1f, 0.1f));
+			rotMovement = Utils.RandomFloat(-0.005f, 0.005f);
 
-			body.Rotation = Utils.RandomSingle(-MathF.PI, MathF.PI);
+			body.Rotation = Utils.RandomFloat(-MathF.PI, MathF.PI);
 			body.LayerDepth = 0.3f;
 
 			healthBar = new HealthBar(this);

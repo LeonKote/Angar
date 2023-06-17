@@ -75,13 +75,13 @@ namespace Angar.Entities
 
 			Destroyed += (Entity destroyer) =>
 			{
-				if (destroyer is Robot robot)
+				if (destroyer is Tank tank)
 				{
-					robot.OnDestroyEntity(this);
+					tank.OnDestroyEntity(this);
 				}
 				else if (destroyer is Projectile projectile)
 				{
-					(projectile.Parent as Robot)?.OnDestroyEntity(this);
+					(projectile.Parent as Tank)?.OnDestroyEntity(this);
 				}
 			};
 		}

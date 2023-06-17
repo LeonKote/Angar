@@ -17,7 +17,7 @@ namespace Angar
 			return rand.Next(max);
 		}
 
-		public static float RandomSingle(float min, float max)
+		public static float RandomFloat(float min, float max)
 		{
 			return rand.NextSingle() * (max - min) + min;
 		}
@@ -44,16 +44,16 @@ namespace Angar
 			switch (rand.Next(4))
 			{
 				case 0:
-					vec = new Vector2(RandomSingle(-384, 384), RandomSingle(-192, 0) - 192);
+					vec = new Vector2(RandomFloat(-384, 384), RandomFloat(-192, 0) - 192);
 					break;
 				case 1:
-					vec = new Vector2(RandomSingle(-384, 384), RandomSingle(0, 192) + 192);
+					vec = new Vector2(RandomFloat(-384, 384), RandomFloat(0, 192) + 192);
 					break;
 				case 2:
-					vec = new Vector2(RandomSingle(-192, 0) - 192, RandomSingle(-384, 384));
+					vec = new Vector2(RandomFloat(-192, 0) - 192, RandomFloat(-384, 384));
 					break;
 				default:
-					vec = new Vector2(RandomSingle(0, 192) + 192, RandomSingle(-384, 384));
+					vec = new Vector2(RandomFloat(0, 192) + 192, RandomFloat(-384, 384));
 					break;
 			}
 
@@ -94,7 +94,7 @@ namespace Angar
 
 		public static Vector2 RandomMapPos()
 		{
-			return new Vector2(RandomSingle(-1000, 1000), RandomSingle(-1000, 1000));
+			return new Vector2(RandomFloat(-1000, 1000), RandomFloat(-1000, 1000));
 		}
 	}
 }

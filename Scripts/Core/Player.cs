@@ -13,7 +13,7 @@ namespace Angar
 {
 	public class Player
 	{
-		private Robot robot;
+		private Tank tank;
 		private Camera camera;
 		private Background background;
 
@@ -24,7 +24,7 @@ namespace Angar
 
 		private static Player instance;
 
-		public Robot Robot { get { return robot; } }
+		public Tank Tank { get { return tank; } }
 		public int SpentLvls { get { return spentLvls; } }
 		public static Player Instance { get { return instance; } }
 
@@ -46,8 +46,8 @@ namespace Angar
 			Move();
 			background.Update();
 
-			Canvas.Instance.MinimapPanel.SetPos(robot.Position);
-			Canvas.Instance.MinimapPanel.SetRot(robot.Rotation);
+			Canvas.Instance.MinimapPanel.SetPos(tank.Position);
+			Canvas.Instance.MinimapPanel.SetRot(tank.Rotation);
 
 			if (Input.GetButtonDown(Keys.D1)) // Set standard gun
 				SetGun<StandardGunSet>();
@@ -59,28 +59,28 @@ namespace Angar
 
 		private void SpawnPlayer(float scale = 1.0f)
 		{
-			robot = new Robot();
-			robot.Scale = scale;
-			robot.Color = new Color(0, 178, 225);
-			robot.Destroyed += OnDestroy;
-			robot.ScoreChanged += OnScoreChanged;
-			World.Instance.AddEntity(robot);
+			tank = new Tank();
+			tank.Scale = scale;
+			tank.Color = new Color(0, 178, 225);
+			tank.Destroyed += OnDestroy;
+			tank.ScoreChanged += OnScoreChanged;
+			World.Instance.AddEntity(tank);
 		}
 
 		private void OnDestroy(Entity destroyer)
 		{
-			AttributesHandler attributes = robot.Attributes;
-			ScoreHandler score = robot.Score;
+			AttributesHandler attributes = tank.Attributes;
+			ScoreHandler score = tank.Score;
 
-			SpawnPlayer(robot.Scale);
-			robot.Position = Utils.RandomRect();
-			robot.Attributes = attributes;
-			robot.Score = score;
+			SpawnPlayer(tank.Scale);
+			tank.Position = Utils.RandomRect();
+			tank.Attributes = attributes;
+			tank.Score = score;
 		}
 
 		private void SetGun<T>() where T : GunSet
 		{
-			robot.SetGun<T>();
+			tank.SetGun<T>();
 			Tutorial.Instance.AddProgress(TutorialStage.SwitchWeapons, 34);
 		}
 
@@ -115,7 +115,7 @@ namespace Angar
 		{
 			AttributesPanel attributesPanel = Canvas.Instance.AttributesPanel;
 
-			robot.Attributes.AddPoint((Attributes)id);
+			tank.Attributes.AddPoint((Attributes)id);
 
 			spentLvls++;
 
@@ -132,7 +132,7 @@ namespace Angar
 
 		private void GrowPlayer()
 		{
-			robot.Scale *= 1.01f;
+			tank.Scale *= 1.01f;
 			background.Size *= 1.01f;
 
 			sizeScale *= 0.99f;
@@ -141,21 +141,21 @@ namespace Angar
 
 		private void SetCameraPosition()
 		{
-			camera.Position = Vector2.Lerp(camera.Position, robot.Position, Globals.DeltaTime * 5);
+			camera.Position = Vector2.Lerp(camera.Position, tank.Position, Globals.DeltaTime * 5);
 		}
 
 		private void RotateAndShoot()
 		{
 			Vector2 mousePos = camera.ScreenToWorldPoint(Input.MousePosition.ToVector2());
 
-			robot.Rotation = MathF.Atan2(mousePos.Y - robot.Position.Y, mousePos.X - robot.Position.X);
+			tank.Rotation = MathF.Atan2(mousePos.Y - tank.Position.Y, mousePos.X - tank.Position.X);
 
 			if (Input.GetMouseButton(0) && !Canvas.IsActive)
 			{
-				Vector2 rotVec = mousePos - robot.Position;
+				Vector2 rotVec = mousePos - tank.Position;
 				rotVec.Normalize();
 
-				robot.Shoot(rotVec);
+				tank.Shoot(rotVec);
 			}
 		}
 
@@ -171,7 +171,7 @@ namespace Angar
 			if (movement.LengthSquared() > 0)
 			{
 				movement.Normalize();
-				robot.AddForce(movement * 0.25f * (robot.Attributes.MovementSpeed * 0.1f + 1));
+				tank.AddForce(movement * 0.25f * (tank.Attributes.MovementSpeed * 0.1f + 1));
 				Tutorial.Instance.AddProgress(TutorialStage.Move, 0.5f, true);
 			}
 		}

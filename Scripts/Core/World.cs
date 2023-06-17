@@ -84,7 +84,7 @@ namespace Angar
 		{
 			Enemy enemy = new Enemy();
 			enemy.Position = Utils.RandomMapPos();
-			enemy.Scale = Utils.RandomSingle(1.0f, 1.5f);
+			enemy.Scale = Utils.RandomFloat(1.0f, 1.5f);
 
 			int points = Player.Instance.SpentLvls;
 			for (int i = 0; i < points; i++)
