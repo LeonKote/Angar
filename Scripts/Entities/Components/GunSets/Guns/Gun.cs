@@ -17,6 +17,7 @@ namespace Angar.Entities.Components
 		public Rectangle SourceRect { get; set; }
 		public float Angle { get; set; }
 		public Vector2 ShootPosition { get; set; }
+		public float BulletDamage { get; set; } = 1.0f;
 		public float BulletSpeed { get; set; } = 1.0f;
 		public float Knockback { get; set; } = 0.5f;
 
@@ -62,7 +63,7 @@ namespace Angar.Entities.Components
 			Projectile projectile = new Projectile();
 			projectile.Health = entity.Attributes.BulletPenetration;
 			projectile.Attributes.MaxHealth = entity.Attributes.BulletPenetration;
-			projectile.Attributes.BodyDamage = entity.Attributes.BulletDamage;
+			projectile.Attributes.BodyDamage = (int)(BulletDamage * entity.Attributes.BulletDamage);
 			if (Angle == 0)
 			{
 				projectile.Position = entity.Position + vec * entity.Scale * 60;

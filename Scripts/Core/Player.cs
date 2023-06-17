@@ -1,6 +1,5 @@
 ﻿using Angar.Entities;
 using Angar.Entities.Components;
-using Angar.Entities.Polygons;
 using Angar.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -18,12 +17,15 @@ namespace Angar
 		private Camera camera;
 		private Background background;
 
-		private static Player instance;
-
 		private int lvl = 1;
 		private int spentLvls;
+		private float screenScale = 1.0f;
+		private float sizeScale = 1.0f;
+
+		private static Player instance;
 
 		public Robot Robot { get { return robot; } }
+		public int SpentLvls { get { return spentLvls; } }
 		public static Player Instance { get { return instance; } }
 
 		public Player()
@@ -44,74 +46,25 @@ namespace Angar
 			Move();
 			background.Update();
 
-
-			// ==================== REFACTORING NEEDED ====================
 			Canvas.Instance.MinimapPanel.SetPos(robot.Position);
 			Canvas.Instance.MinimapPanel.SetRot(robot.Rotation);
 
-			if (Input.GetButtonDown(Keys.Q)) // Spawn polygons
-			{
-				for (int i = 0; i < 25; i++)
-				{
-					SquarePolygon point = new SquarePolygon();
-					point.Position = robot.Position + new Vector2(Utils.RandomSingle(-1024, 1024), Utils.RandomSingle(-1024, 1024));
-					World.Instance.Entities.Add(point);
-				}
-				for (int i = 0; i < 25; i++)
-				{
-					TrianglePolygon point = new TrianglePolygon();
-					point.Position = robot.Position + new Vector2(Utils.RandomSingle(-1024, 1024), Utils.RandomSingle(-1024, 1024));
-					World.Instance.Entities.Add(point);
-				}
-			}
-			else if (Input.GetButtonDown(Keys.E)) // Spawn enemy
-			{
-				Enemy enemy = new Enemy();
-				enemy.Position = robot.Position + new Vector2(Utils.RandomSingle(-512, 512), Utils.RandomSingle(-512, 512));
-				World.Instance.Entities.Add(enemy);
-			}
-			else if (Input.GetButtonDown(Keys.R)) // Grow player
-			{
-				robot.Scale *= 1.01f;
-				camera.Zoom *= 0.99f;
-				background.Size *= 1.01f;
-			}
-			else if (Input.GetButtonDown(Keys.T)) // Set twin gun
-			{
-				float scale = robot.gunSet.Scale;
-				robot.components.Remove(robot.gunSet);
-				robot.gunSet = new TwinGunSet(robot);
-				robot.gunSet.SetScale(scale);
-				robot.components.Add(robot.gunSet);
-			}
-			else if (Input.GetButtonDown(Keys.Y)) // Set sniper gun
-			{
-				float scale = robot.gunSet.Scale;
-				robot.components.Remove(robot.gunSet);
-				robot.gunSet = new SniperGunSet(robot);
-				robot.gunSet.SetScale(scale);
-				robot.components.Add(robot.gunSet);
-			}
-			else if (Input.GetButtonDown(Keys.U)) // Set standard gun
-			{
-				float scale = robot.gunSet.Scale;
-				robot.components.Remove(robot.gunSet);
-				robot.gunSet = new StandardGunSet(robot);
-				robot.gunSet.SetScale(scale);
-				robot.components.Add(robot.gunSet);
-			}
-			// ==================== REFACTORING NEEDED ====================
+			if (Input.GetButtonDown(Keys.D1)) // Set standard gun
+				SetGun<StandardGunSet>();
+			else if (Input.GetButtonDown(Keys.D2)) // Set twin gun
+				SetGun<TwinGunSet>();
+			else if (Input.GetButtonDown(Keys.D3)) // Set sniper gun
+				SetGun<SniperGunSet>();
 		}
 
-		private void SpawnPlayer()
+		private void SpawnPlayer(float scale = 1.0f)
 		{
 			robot = new Robot();
+			robot.Scale = scale;
 			robot.Color = new Color(0, 178, 225);
 			robot.Destroyed += OnDestroy;
 			robot.ScoreChanged += OnScoreChanged;
 			World.Instance.AddEntity(robot);
-
-			camera.Zoom = 1.0f;
 		}
 
 		private void OnDestroy(Entity destroyer)
@@ -119,16 +72,23 @@ namespace Angar
 			AttributesHandler attributes = robot.Attributes;
 			ScoreHandler score = robot.Score;
 
-			SpawnPlayer();
+			SpawnPlayer(robot.Scale);
+			robot.Position = Utils.RandomRect();
 			robot.Attributes = attributes;
 			robot.Score = score;
-			robot.Position = Utils.RandomRect();
+		}
+
+		private void SetGun<T>() where T : GunSet
+		{
+			robot.SetGun<T>();
+			Tutorial.Instance.AddProgress(TutorialStage.SwitchWeapons, 34);
 		}
 
 		private void OnScoreChanged(ScoreHandler score)
 		{
 			ProgressBar scoreBar = Canvas.Instance.ScoreBar;
 			Label scoreText = Canvas.Instance.ScoreText;
+			AttributesPanel attributesPanel = Canvas.Instance.AttributesPanel;
 
 			scoreBar.MaxValue = score.NextLvlExp - score.LastLvlExp;
 			scoreBar.Value = score.Exp - score.LastLvlExp;
@@ -137,9 +97,12 @@ namespace Angar
 
 			if (score.Lvl - lvl > 0)
 			{
-				Canvas.Instance.AttributesPanel.Show();
+				attributesPanel.UpdatePoints(score.Lvl - spentLvls - 1);
+				attributesPanel.Show();
 
 				lvl = score.Lvl;
+
+				GrowPlayer();
 
 				Tutorial.Instance.SetProgress(TutorialStage.Lvl5, score.Lvl * 20);
 				Tutorial.Instance.SetProgress(TutorialStage.Lvl10, score.Lvl * 10);
@@ -150,23 +113,30 @@ namespace Angar
 
 		private void OnAttributeAdd(int id)
 		{
-			ProgressBar progressBar = (ProgressBar)Canvas.Instance.AttributesPanel.Childs[id];
-
-			progressBar.Value++;
+			AttributesPanel attributesPanel = Canvas.Instance.AttributesPanel;
 
 			robot.Attributes.AddPoint((Attributes)id);
 
-			if (progressBar.Value == 7)
-				((ImageButton)progressBar.Childs[1]).Interactable = false;
-
 			spentLvls++;
+
+			attributesPanel.UpdatePoints(lvl - spentLvls - 1);
 
 			if (spentLvls == lvl - 1)
 			{
-				Canvas.Instance.AttributesPanel.Hide();
+				attributesPanel.Hide();
 			}
 
 			Tutorial.Instance.AddProgress(TutorialStage.AddAttribute, 100);
+			Tutorial.Instance.SetProgress(TutorialStage.AddAttribute15, spentLvls * 7);
+		}
+
+		private void GrowPlayer()
+		{
+			robot.Scale *= 1.01f;
+			background.Size *= 1.01f;
+
+			sizeScale *= 0.99f;
+			camera.Zoom = screenScale * sizeScale;
 		}
 
 		private void SetCameraPosition()
@@ -213,7 +183,8 @@ namespace Angar
 
 		public void SetCameraZoom(float scale)
 		{
-			camera.Zoom = scale;
+			screenScale = scale;
+			camera.Zoom = screenScale * sizeScale;
 		}
 	}
 }

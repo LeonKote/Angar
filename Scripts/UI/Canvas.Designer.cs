@@ -58,7 +58,7 @@ namespace Angar.UI
 			AttributesPanel.Origin = Align.BottomLeft;
 			elements.Add(AttributesPanel);
 			//
-			// AbilitiesPanel
+			// MinimapPanel
 			//
 			MinimapPanel = new MinimapPanel();
 			MinimapPanel.LocalPosition = new Vector2(-20, -20);

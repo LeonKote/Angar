@@ -11,10 +11,12 @@ namespace Angar
 	public enum TutorialStage
 	{
 		Move,
+		SwitchWeapons,
 		Destroy,
 		AddAttribute,
 		Lvl5,
-		Lvl10
+		Lvl10,
+		AddAttribute15
 	}
 
 	public class Tutorial
@@ -22,10 +24,12 @@ namespace Angar
 		private static readonly string[] stageDescriptions =
 		{
 			"Для передвижения используйте\nWASD",
+			"Для переключения оружия\nиспользуйте клавиши 1 2 3",
 			"Уничтожьте пару полигонов\n\nПолигоны - это геометрические\nфигуры, которые дают\nнебольшое количество очков\nопыта",
 			"Выберите один из восьми\nатрибутов для прокачки",
 			"Наберите 5-й уровень,\nуничтожая полигоны",
 			"Достигнете 10-го уровня\nуничтожая врагов или полигоны",
+			"Вложите 15 уровней в прокачку",
 			"Развлекайтесь)"
 		};
 

@@ -28,7 +28,7 @@ namespace Angar.Entities
 			set
 			{
 				exp = value;
-				if (exp > nextLvlExp)
+				while (exp > nextLvlExp)
 				{
 					lvl++;
 					lastLvlExp = nextLvlExp;

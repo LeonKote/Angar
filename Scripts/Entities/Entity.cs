@@ -96,6 +96,9 @@ namespace Angar.Entities
 			position += movement;
 			movement *= friction;
 
+			if (this is not Projectile)
+				Utils.ClampVector(ref position);
+
 			foreach (Component component in components)
 			{
 				component.Update();
@@ -122,7 +125,8 @@ namespace Angar.Entities
 				if (dist < size * size)
 				{
 					Vector2 vec = entity.position - this.position;
-					vec.Normalize();
+					if (vec.LengthSquared() > 0)
+						vec.Normalize();
 
 					entity.OnCollision(this, vec);
 					this.OnCollision(entity, -vec);

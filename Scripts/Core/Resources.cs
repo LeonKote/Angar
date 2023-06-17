@@ -19,8 +19,10 @@ namespace Angar
 		public static Texture2D RoundedRect;
 		public static Texture2D RoundedRect2;
 		public static Texture2D Triangle;
+		public static Texture2D Pentagon;
 		public static Texture2D Polygon1;
 		public static Texture2D Polygon2;
+		public static Texture2D Polygon3;
 		public static Texture2D Minimap;
 		public static Texture2D MinimapPlayer;
 
@@ -34,11 +36,13 @@ namespace Angar
 			RoundedRect = content.Load<Texture2D>("Primitives/roundedRect");
 			RoundedRect2 = content.Load<Texture2D>("Primitives/roundedRect2");
 			Triangle = content.Load<Texture2D>("Primitives/triangle");
+			Pentagon = content.Load<Texture2D>("Primitives/pentagon");
 			Minimap = content.Load<Texture2D>("UI/minimap");
 			MinimapPlayer = content.Load<Texture2D>("UI/minimapPlayer");
 
 			Polygon1 = Utils.GetOutlineTexture(RoundedRect, 0.4f);
 			Polygon2 = Utils.GetOutlineTexture(Triangle, 0.3f, new Vector2(0, 1));
+			Polygon3 = Utils.GetOutlineTexture(Pentagon, 0.6f, new Vector2(0, 0.5f));
 		}
 	}
 }

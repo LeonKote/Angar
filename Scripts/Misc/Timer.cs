@@ -31,8 +31,8 @@ namespace Angar
 			}
 			else
 			{
-				Ended?.Invoke();
 				isPlaying = false;
+				Ended?.Invoke();
 			}
 		}
 

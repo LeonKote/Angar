@@ -12,9 +12,12 @@ namespace Angar.UI
 	{
 		private static readonly Color shadowColor = new Color(85, 85, 85);
 
+		private float rotation;
 		private string text;
 		private SpriteFont font;
 		private Vector2 textOrigin;
+
+		public float Rotation { get { return rotation; } set { rotation = value; } }
 
 		public string Text
 		{
@@ -30,8 +33,8 @@ namespace Angar.UI
 
 		public override void Draw()
 		{
-			Globals.SpriteBatch.DrawString(font, text, position + Vector2.One, shadowColor, 0, textOrigin, scale, SpriteEffects.None, 0);
-			Globals.SpriteBatch.DrawString(font, text, position, Color.White, 0, textOrigin, scale, SpriteEffects.None, 0);
+			Globals.SpriteBatch.DrawString(font, text, position + Vector2.One, shadowColor, rotation, textOrigin, scale, SpriteEffects.None, 0);
+			Globals.SpriteBatch.DrawString(font, text, position, Color.White, rotation, textOrigin, scale, SpriteEffects.None, 0);
 			base.Draw();
 		}
 	}

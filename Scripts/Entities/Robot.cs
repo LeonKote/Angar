@@ -63,5 +63,17 @@ namespace Angar.Entities
 		{
 			gunSet.ShootDelay(vec);
 		}
+
+		public void SetGun<T>() where T : GunSet
+		{
+			if (gunSet is T) return;
+			float rotation = gunSet.Rotation;
+			float scale = gunSet.Scale;
+			components.Remove(gunSet);
+			gunSet = (T)Activator.CreateInstance(typeof(T), this);
+			gunSet.Rotation = rotation;
+			gunSet.SetScale(scale);
+			components.Add(gunSet);
+		}
 	}
 }

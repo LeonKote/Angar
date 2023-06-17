@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Angar.Entities;
+using Angar.SmartTextures;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +42,9 @@ namespace Angar.UI
 		private Timer fadeTimer;
 		private bool isShown;
 
+		private int points;
+		private Label pointsLabel;
+
 		public event Action<int> AttributeAdded;
 
 		public AttributesPanel()
@@ -73,6 +78,16 @@ namespace Angar.UI
 				bar.AddChild(button);
 			}
 
+			pointsLabel = new Label();
+			pointsLabel.Rotation = -MathF.PI / 6;
+			pointsLabel.Anchor = Align.TopRight;
+			pointsLabel.Origin = Align.Left;
+			pointsLabel.Font = Resources.Rubik;
+			pointsLabel.Text = "x1";
+			pointsLabel.LocalScale = 0.9f;
+			pointsLabel.IsActive = false;
+			AddChild(pointsLabel);
+
 			fadeAnim = new Anim();
 			fadeAnim.Duration = 0.25f;
 			fadeAnim.IsCurve = true;
@@ -81,7 +96,13 @@ namespace Angar.UI
 
 			fadeTimer = new Timer();
 			fadeTimer.Duration = 3f;
-			fadeTimer.Ended += () => fadeAnim.Play();
+			fadeTimer.Ended += () =>
+			{
+				if (points > 0)
+					SetInteractable(true);
+				else
+					fadeAnim.Play();
+			};
 		}
 
 		private void OnFade(float t)
@@ -111,6 +132,13 @@ namespace Angar.UI
 			fadeTimer.Start();
 		}
 
+		public void UpdatePoints(int points)
+		{
+			this.points = points;
+			pointsLabel.IsActive = points > 0;
+			pointsLabel.Text = "x" + points;
+		}
+
 		private void SetInteractable(bool interactable)
 		{
 			for (int i = 0; i < 8; i++)
@@ -123,6 +151,13 @@ namespace Angar.UI
 
 		private void OnAbilityAdded(int id)
 		{
+			ProgressBar progressBar = (ProgressBar)Childs[id];
+
+			progressBar.Value++;
+
+			if (progressBar.Value == 7)
+				((ImageButton)progressBar.Childs[1]).Interactable = false;
+
 			AttributeAdded.Invoke(id);
 		}
 	}

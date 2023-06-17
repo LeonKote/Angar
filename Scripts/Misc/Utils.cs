@@ -12,6 +12,11 @@ namespace Angar
 	{
 		private static Random rand = new Random();
 
+		public static int RandomInt(int max)
+		{
+			return rand.Next(max);
+		}
+
 		public static float RandomSingle(float min, float max)
 		{
 			return rand.NextSingle() * (max - min) + min;
@@ -72,6 +77,24 @@ namespace Angar
 			Globals.SpriteBatch.End();
 			Globals.GraphicsDevice.SetRenderTarget(null);
 			return renderTarget;
+		}
+
+		public static float ClampDimension(float value)
+		{
+			if (value > 1000) return 1000;
+			else if (value < -1000) return -1000;
+			else return value;
+		}
+
+		public static void ClampVector(ref Vector2 vec)
+		{
+			vec.X = ClampDimension(vec.X);
+			vec.Y = ClampDimension(vec.Y);
+		}
+
+		public static Vector2 RandomMapPos()
+		{
+			return new Vector2(RandomSingle(-1000, 1000), RandomSingle(-1000, 1000));
 		}
 	}
 }

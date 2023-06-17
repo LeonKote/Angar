@@ -24,6 +24,7 @@ namespace Angar.Entities.Components
 			firstGun.IdlePosition = new Vector2(-32, 66);
 			firstGun.ShootPosition = new Vector2(-16, 66);
 			firstGun.SourceRect = new Rectangle(32, 0, 96, 64);
+			firstGun.BulletDamage = 0.75f;
 			guns.Add(firstGun);
 
 			secondGun = new StandardGun(entity);
@@ -32,6 +33,7 @@ namespace Angar.Entities.Components
 			secondGun.IdlePosition = new Vector2(-32, -2);
 			secondGun.ShootPosition = new Vector2(-16, -2);
 			secondGun.SourceRect = new Rectangle(32, 0, 96, 64);
+			secondGun.BulletDamage = 0.75f;
 			guns.Add(secondGun);
 		}
 

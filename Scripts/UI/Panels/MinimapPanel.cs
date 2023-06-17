@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Angar.UI
 {
-	// Minimap made in a hurry)
-	// For 1920x1080 screen resolution
 	public class MinimapPanel : UIElement
 	{
 		private Vector2 pos;
+		private Vector2 posOffset;
+		private float sizeOffset;
 		private float rot;
 
 		public MinimapPanel()
@@ -27,9 +27,16 @@ namespace Angar.UI
 			base.Draw();
 		}
 
+		protected override void ApplyTransform()
+		{
+			base.ApplyTransform();
+			posOffset = rect.Location.ToVector2() + rect.Size.ToVector2() * 0.5f;
+			sizeOffset = 2200 / (float)rect.Size.X;
+		}
+
 		public void SetPos(Vector2 vec)
 		{
-			pos = vec / 50 + new Vector2(1800, 895);
+			pos = vec / sizeOffset + posOffset;
 		}
 
 		public void SetRot(float rot)
