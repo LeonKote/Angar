@@ -49,6 +49,8 @@ namespace Angar.UI
 
 		public AttributesPanel()
 		{
+			IsActive = false;
+
 			for (int i = 0; i < 8; i++)
 			{
 				ProgressBar bar = new ProgressBar();
@@ -92,7 +94,12 @@ namespace Angar.UI
 			fadeAnim.Duration = 0.25f;
 			fadeAnim.IsCurve = true;
 			fadeAnim.Playing += OnFade;
-			fadeAnim.Ended += () => isShown = !isShown;
+			fadeAnim.Ended += () =>
+			{
+				isShown = !isShown;
+				if (!isShown)
+					IsActive = false;
+			};
 
 			fadeTimer = new Timer();
 			fadeTimer.Duration = 3f;
@@ -121,6 +128,7 @@ namespace Angar.UI
 		public void Show()
 		{
 			if (isShown) return;
+			IsActive = true;
 			SetInteractable(true);
 			fadeAnim.Play();
 		}
