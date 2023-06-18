@@ -11,7 +11,7 @@ namespace Angar.Entities
 {
 	public class Tank : Entity
 	{
-		public GunSet gunSet; // protected
+		protected GunSet gunSet;
 
 		private ScoreHandler score = new ScoreHandler();
 

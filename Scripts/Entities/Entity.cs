@@ -21,7 +21,7 @@ namespace Angar.Entities
 		protected Anim hurtAnim;
 		protected Anim destroyAnim;
 
-		public HashSet<Component> components = new HashSet<Component>(); // protected
+		protected HashSet<Component> components = new HashSet<Component>();
 		protected Body body;
 		protected HealthBar healthBar;
 
